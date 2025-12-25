@@ -2302,3 +2302,15 @@ html {
   inherits: false;
   initial-value: 1;
 }
+
+/* Hero Carousel Styles - Force single slide display */
+.hero-carousel [data-slot="carousel-content"] > div {
+  display: flex;
+  gap: 0;
+}
+
+.hero-carousel [data-slot="carousel-item"] {
+  flex: 0 0 100% !important;
+  min-width: 0 !important;
+  padding-left: 0 !important;
+}

@@ -5,9 +5,60 @@ import { ArrowRight, CheckCircle, Users, Award, TrendingUp, Star, Quote } from '
 import { AnimatedSection } from '../components/AnimatedSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from '../components/ui/carousel';
 
 export const Home: React.FC = () => {
   const { t } = useLanguage();
+  const [carouselApi, setCarouselApi] = React.useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [slideCount, setSlideCount] = React.useState(0);
+
+  // Hero Slider Data
+  const heroSlides = [
+    {
+      id: 1,
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+      title: 'Transform Your Digital Presence',
+      subtitle: 'Cutting-edge solutions for modern businesses. We build innovative digital experiences that drive growth.',
+      ctaText: 'Get Started',
+      ctaLink: '/contact',
+    },
+    {
+      id: 2,
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+      title: 'Innovative Web Solutions',
+      subtitle: 'Building tomorrow\'s digital experiences today. From concept to launch, we deliver excellence.',
+      ctaText: 'Our Services',
+      ctaLink: '/services',
+    },
+    {
+      id: 3,
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+      title: 'Scale Your Business',
+      subtitle: 'From startup to enterprise, we grow with you. Partner with us to achieve your digital goals.',
+      ctaText: 'Contact Us',
+      ctaLink: '/contact',
+    },
+  ];
+
+  // Carousel slide change handler
+  React.useEffect(() => {
+    if (!carouselApi) return;
+
+    setSlideCount(carouselApi.scrollSnapList().length);
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+
+    carouselApi.on('select', () => {
+      setCurrentSlide(carouselApi.selectedScrollSnap());
+    });
+  }, [carouselApi]);
 
   const services = [
     {
@@ -108,79 +159,98 @@ export const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 text-white pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-5xl lg:text-6xl mb-6"
-              >
-                {t('hero.title')}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-xl mb-8 text-white/90"
-              >
-                {t('hero.subtitle')}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4"
-              >
-                <Link
-                  to="/contact"
-                  className="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105 flex items-center justify-center space-x-2"
-                >
-                  <span>{t('hero.cta')}</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  to="/about"
-                  className="border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center"
-                >
-                  {t('hero.learn')}
-                </Link>
-              </motion.div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative"
-            >
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1628017974562-9f5bec603d95?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB0ZWNoJTIwb2ZmaWNlfGVufDF8fHx8MTc2NDM1ODI5OXww&ixlib=rb-4.1.0&q=80&w=1080"
-                alt="Modern Tech Office"
-                className="rounded-2xl shadow-2xl"
-              />
-            </motion.div>
-          </div>
+      {/* Hero Slider Section */}
+      <section className="relative pt-16">
+        <div className="hero-carousel w-full overflow-hidden">
+          <Carousel
+            setApi={setCarouselApi}
+            opts={{
+              loop: true,
+              align: 'start',
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="ml-0">
+              {heroSlides.map((slide) => (
+                <CarouselItem key={slide.id} className="pl-0 min-w-0 shrink-0 grow-0" style={{ flexBasis: '100%' }}>
+                  <div className="relative h-[600px] lg:h-[700px] w-full">
+                    {/* Background Image */}
+                    <div className="absolute inset-0">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+                    </div>
+
+                    {/* Content Overlay */}
+                    <div className="relative z-10 h-full flex items-center">
+                      <div className="container mx-auto px-4 lg:px-16">
+                        <motion.div
+                          initial={{ opacity: 0, y: 30 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8 }}
+                          className="max-w-2xl text-white"
+                        >
+                          <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2, duration: 0.6 }}
+                            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+                          >
+                            {slide.title}
+                          </motion.h1>
+                          <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 0.6 }}
+                            className="text-lg md:text-xl mb-8 text-white/90 leading-relaxed"
+                          >
+                            {slide.subtitle}
+                          </motion.p>
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6, duration: 0.6 }}
+                          >
+                            <Link
+                              to={slide.ctaLink}
+                              className="inline-flex items-center space-x-2 bg-white text-gray-900 px-8 py-4 rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105 font-semibold"
+                            >
+                              <span>{slide.ctaText}</span>
+                              <ArrowRight className="w-5 h-5" />
+                            </Link>
+                          </motion.div>
+                        </motion.div>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+
+            {/* Navigation Arrows */}
+            <CarouselPrevious className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 h-12 w-12 bg-white/20 hover:bg-white/40 border-0 text-white backdrop-blur-sm" />
+            <CarouselNext className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 h-12 w-12 bg-white/20 hover:bg-white/40 border-0 text-white backdrop-blur-sm" />
+
+            {/* Dot Indicators */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
+              {heroSlides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => carouselApi?.scrollTo(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
+                    ? 'bg-white w-8'
+                    : 'bg-white/50 hover:bg-white/80'
+                    }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </Carousel>
         </div>
-        
-        {/* Animated Background Elements */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
-          className="absolute top-20 right-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-          className="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
-        />
       </section>
 
       {/* Stats Section */}

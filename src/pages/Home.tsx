@@ -240,8 +240,8 @@ export const Home: React.FC = () => {
               style={{ width: '48px', height: '48px', fontSize: 0 }}
             />
 
-            {/* Dot Indicators - Positioned higher to be visible */}
-            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+            {/* Dot Indicators - Positioned higher to be visible within slide */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex gap-3 z-20" style={{ bottom: '80px' }}>
               {heroSlides.map((_, index) => (
                 <button
                   key={index}

@@ -18,32 +18,32 @@ export const Home: React.FC = () => {
   const { t } = useLanguage();
   const [carouselApi, setCarouselApi] = React.useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const [slideCount, setSlideCount] = React.useState(0);
 
-  // Hero Slider Data
+  // Hero Slider Data - NexGenTeck Brand
   const heroSlides = [
     {
       id: 1,
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
-      title: 'Transform Your Digital Presence',
-      subtitle: 'Cutting-edge solutions for modern businesses. We build innovative digital experiences that drive growth.',
-      ctaText: 'Get Started',
+      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+      title: 'Transform Your Workflow With Agile Scalable Teams',
+      subtitle: 'Grow without the overhead. We find, vet, and onboard reliable remote professionals who adapt to your workflow.',
+      ctaText: 'Discover More Today',
+      ctaSecondary: 'Watch a Quick Demo',
       ctaLink: '/contact',
     },
     {
       id: 2,
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
-      title: 'Innovative Web Solutions',
-      subtitle: 'Building tomorrow\'s digital experiences today. From concept to launch, we deliver excellence.',
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+      title: 'Smarter Teams, Stronger Results',
+      subtitle: 'From AI Automation to Web Development, we provide the talent to drive your growth.',
       ctaText: 'Our Services',
       ctaLink: '/services',
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
-      title: 'Scale Your Business',
-      subtitle: 'From startup to enterprise, we grow with you. Partner with us to achieve your digital goals.',
-      ctaText: 'Contact Us',
+      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+      title: 'Innovation Meets Excellence',
+      subtitle: 'Cutting-edge solutions for modern businesses. 99% Uptime, 24/7 Support.',
+      ctaText: 'Get Started',
       ctaLink: '/contact',
     },
   ];
@@ -52,7 +52,6 @@ export const Home: React.FC = () => {
   React.useEffect(() => {
     if (!carouselApi) return;
 
-    setSlideCount(carouselApi.scrollSnapList().length);
     setCurrentSlide(carouselApi.selectedScrollSnap());
 
     carouselApi.on('select', () => {
@@ -181,8 +180,8 @@ export const Home: React.FC = () => {
                         alt={slide.title}
                         className="w-full h-full object-cover"
                       />
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-black/40" />
+                      {/* Gradient Overlay - NexGenTeck Dark Brand */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
                     </div>
 
                     {/* Content Overlay */}
@@ -213,8 +212,9 @@ export const Home: React.FC = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.6, duration: 0.6 }}
-                          className="flex justify-center"
+                          className="flex flex-wrap justify-center gap-4"
                         >
+                          {/* Primary CTA Button */}
                           <Link
                             to={slide.ctaLink}
                             className="inline-flex items-center space-x-2 bg-white text-gray-900 px-8 py-3 rounded-full hover:bg-gray-100 transition-all transform hover:scale-105 font-bold text-base shadow-lg"
@@ -222,6 +222,15 @@ export const Home: React.FC = () => {
                             <span>{slide.ctaText}</span>
                             <ArrowRight className="w-5 h-5" />
                           </Link>
+                          {/* Secondary CTA Button (if exists) */}
+                          {'ctaSecondary' in slide && slide.ctaSecondary && (
+                            <Link
+                              to="/services"
+                              className="inline-flex items-center space-x-2 bg-transparent border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white/10 transition-all font-bold text-base"
+                            >
+                              <span>{slide.ctaSecondary}</span>
+                            </Link>
+                          )}
                         </motion.div>
                       </motion.div>
                     </div>

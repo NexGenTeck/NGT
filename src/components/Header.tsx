@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage, Language } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,6 +12,7 @@ export const Header: React.FC = () => {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const location = useLocation();
   const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,9 +45,8 @@ export const Header: React.FC = () => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
+        }`}
     >
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -65,7 +66,7 @@ export const Header: React.FC = () => {
             <Link to="/about" className={`hover:text-orange-500 transition-colors ${location.pathname === '/about' ? 'text-orange-500' : 'text-gray-700'}`}>
               {t('nav.about')}
             </Link>
-            
+
             {/* Services Dropdown */}
             <div className="relative" onMouseEnter={() => setIsServicesOpen(true)} onMouseLeave={() => setIsServicesOpen(false)}>
               <button className={`flex items-center space-x-1 hover:text-orange-500 transition-colors ${location.pathname.startsWith('/services') ? 'text-orange-500' : 'text-gray-700'}`}>
@@ -131,9 +132,8 @@ export const Header: React.FC = () => {
                           setLanguage(lang.code);
                           setIsLangOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 hover:bg-orange-50 transition-colors flex items-center space-x-2 ${
-                          language === lang.code ? 'text-orange-500' : 'text-gray-700'
-                        }`}
+                        className={`w-full text-left px-4 py-2 hover:bg-orange-50 transition-colors flex items-center space-x-2 ${language === lang.code ? 'text-orange-500' : 'text-gray-700'
+                          }`}
                       >
                         <span>{lang.flag}</span>
                         <span>{lang.name}</span>
@@ -143,6 +143,37 @@ export const Header: React.FC = () => {
                 )}
               </AnimatePresence>
             </div>
+
+            {/* Dark Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-700 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-100"
+              aria-label="Toggle theme"
+            >
+              <AnimatePresence mode="wait">
+                {theme === 'dark' ? (
+                  <motion.div
+                    key="sun"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Sun className="w-5 h-5" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="moon"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Moon className="w-5 h-5" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -205,7 +236,7 @@ export const Header: React.FC = () => {
                 <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors text-center">
                   {t('nav.contact')}
                 </Link>
-                
+
                 {/* Mobile Language Selector */}
                 <div className="pt-4 border-t border-gray-200">
                   <div className="grid grid-cols-2 gap-2">
@@ -216,9 +247,8 @@ export const Header: React.FC = () => {
                           setLanguage(lang.code);
                           setIsMenuOpen(false);
                         }}
-                        className={`px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 ${
-                          language === lang.code ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
+                        className={`px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 ${language === lang.code ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
                       >
                         <span>{lang.flag}</span>
                         <span>{lang.name}</span>

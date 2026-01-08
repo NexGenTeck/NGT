@@ -12,7 +12,7 @@ on:
 
 jobs:
   lint-and-test:
-    name: Lint & Test
+    name: Lint & Build Check
     runs-on: ubuntu-latest
     
     steps:
@@ -37,9 +37,16 @@ jobs:
         env:
           NODE_ENV: production
           
-      - name: Check build size
+      - name: Verify build output
         run: |
           echo "Build completed successfully!"
-          du -sh build/
-          echo "Build files:"
-          ls -lh build/
+          if [ -d "build" ]; then
+            echo "Build directory size:"
+            du -sh build/
+            echo "Build files:"
+            ls -la build/
+          else
+            echo "Error: build directory not found!"
+            exit 1
+          fi
+

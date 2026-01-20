@@ -23,20 +23,20 @@ export const Header: React.FC = () => {
   }, []);
 
   const languages: { code: Language; name: string; flag: string }[] = [
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'ur', name: 'اردو', flag: '🇵🇰' },
-    { code: 'ko', name: '한국어', flag: '🇰🇷' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'pt', name: 'Português', flag: '🇧🇷' },
-    { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
-    { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
-    { code: 'pl', name: 'Polski', flag: '🇵🇱' },
-    { code: 'ja', name: '日本語', flag: '🇯🇵' },
-    { code: 'bn', name: 'বাংলা', flag: '🇧🇩' },
+    { code: 'en', name: 'English', flag: 'https://flagcdn.com/w20/gb.png' },
+    { code: 'ur', name: 'اردو', flag: 'https://flagcdn.com/w20/pk.png' },
+    { code: 'ko', name: '한국어', flag: 'https://flagcdn.com/w20/kr.png' },
+    { code: 'zh', name: '中文', flag: 'https://flagcdn.com/w20/cn.png' },
+    { code: 'ar', name: 'العربية', flag: 'https://flagcdn.com/w20/sa.png' },
+    { code: 'de', name: 'Deutsch', flag: 'https://flagcdn.com/w20/de.png' },
+    { code: 'es', name: 'Español', flag: 'https://flagcdn.com/w20/es.png' },
+    { code: 'fr', name: 'Français', flag: 'https://flagcdn.com/w20/fr.png' },
+    { code: 'pt', name: 'Português', flag: 'https://flagcdn.com/w20/br.png' },
+    { code: 'tr', name: 'Türkçe', flag: 'https://flagcdn.com/w20/tr.png' },
+    { code: 'nl', name: 'Nederlands', flag: 'https://flagcdn.com/w20/nl.png' },
+    { code: 'pl', name: 'Polski', flag: 'https://flagcdn.com/w20/pl.png' },
+    { code: 'ja', name: '日本語', flag: 'https://flagcdn.com/w20/jp.png' },
+    { code: 'bn', name: 'বাংলা', flag: 'https://flagcdn.com/w20/bd.png' },
   ];
 
   const services = [
@@ -158,7 +158,7 @@ export const Header: React.FC = () => {
                         className={`w-full text-left px-4 py-2 ${dropdownHover} transition-colors flex items-center space-x-2 ${language === lang.code ? 'text-orange-500' : textColor
                           }`}
                       >
-                        <span>{lang.flag}</span>
+                        <img src={lang.flag} alt={lang.name} className="w-5 h-4 object-cover rounded-sm" />
                         <span>{lang.name}</span>
                       </button>
                     ))}

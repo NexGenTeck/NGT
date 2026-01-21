@@ -106,7 +106,7 @@ export const Footer: React.FC = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="text-white mb-4">Newsletter</h3>
+            <h3 className="text-white mb-4">{t('footer.newsletter')}</h3>
             <p className="text-gray-400 mb-4">{t('footer.subscribe')}</p>
             <form onSubmit={handleSubscribe} className="space-y-3">
               <div className="relative">
@@ -114,7 +114,7 @@ export const Footer: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
+                  placeholder={t('footer.emailHelper')}
                   className={`w-full ${inputBg} text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500`}
                   required
                 />
@@ -123,7 +123,7 @@ export const Footer: React.FC = () => {
                 type="submit"
                 className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center space-x-2"
               >
-                <span>Subscribe</span>
+                <span>{t('footer.subscribeButton')}</span>
                 <Send className="w-4 h-4" />
               </button>
             </form>
@@ -151,17 +151,17 @@ export const Footer: React.FC = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-center md:text-left">
-              © 2025 NexGenTeck. All rights reserved.
+              © 2025 NexGenTeck. {t('footer.rights')}
             </p>
             <div className="flex space-x-6">
               <Link to="/privacy" className="text-gray-400 hover:text-orange-500 transition-colors">
-                Privacy Policy
+                {t('footer.privacy')}
               </Link>
               <Link to="/terms" className="text-gray-400 hover:text-orange-500 transition-colors">
-                Terms of Service
+                {t('footer.terms')}
               </Link>
               <Link to="/sitemap" className="text-gray-400 hover:text-orange-500 transition-colors">
-                Sitemap
+                {t('footer.sitemap')}
               </Link>
             </div>
           </div>

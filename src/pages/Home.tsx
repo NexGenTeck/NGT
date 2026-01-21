@@ -158,19 +158,19 @@ export const Home: React.FC = () => {
   const portfolioPreview = [
     {
       title: 'Global E-commerce Platform',
-      category: 'E-commerce',
+      category: 'services.ecommerce',
       image: 'https://images.unsplash.com/photo-1727407209320-1fa6ae60ee05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlY29tbWVyY2UlMjBzaG9wcGluZ3xlbnwxfHx8fDE3NjQzNDQ4NTV8MA&ixlib=rb-4.1.0&q=80&w=1080',
       link: '/portfolio/global-ecommerce',
     },
     {
       title: 'Corporate Website Redesign',
-      category: 'Web Development',
+      category: 'services.web',
       image: 'https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGluZ3xlbnwxfHx8fDE3NjQzODYyMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
       link: '/portfolio/corporate-redesign',
     },
     {
       title: 'Fitness Mobile App',
-      category: 'Mobile App',
+      category: 'services.mobile',
       image: 'https://images.unsplash.com/photo-1609921212029-bb5a28e60960?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2JpbGUlMjBhcHAlMjBkZXNpZ258ZW58MXx8fHwxNzY0NDEwODY4fDA&ixlib=rb-4.1.0&q=80&w=1080',
       link: '/portfolio/fitness-app',
     },
@@ -364,7 +364,7 @@ export const Home: React.FC = () => {
               to="/services"
               className="inline-flex items-center space-x-2 bg-orange-500 text-white px-8 py-4 rounded-lg hover:bg-orange-600 transition-colors"
             >
-              <span>View All Services</span>
+              <span>{t('services.viewAll')}</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -440,7 +440,7 @@ export const Home: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                       <div className="absolute bottom-4 left-4 right-4">
-                        <div className="text-sm text-blue-400 mb-2">{project.category}</div>
+                        <div className="text-sm text-blue-400 mb-2">{t(project.category)}</div>
                         <h3 className="text-xl text-white">{project.title}</h3>
                       </div>
                     </div>

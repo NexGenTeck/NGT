@@ -719,7 +719,7 @@ const translations: Record<Language, Record<string, string>> = {
     'services.web.faq5.q': 'وقت؟', 'services.web.faq5.a': '2-4 ہفتے۔',
 
     // E-commerce (Urdu)
-    'services.ecommerce.description': 'اپنی ریٹیل کو ای کامرس پلیٹ فارم کے ساتھ تبدیل کریں۔',
+    'services.ecommerce.description': 'اپنے ریٹیل کاروبار کو ایک کسٹم ای کامرس پلیٹ فارم کے ساتھ تبدیل کریں جو تبادلوں کو زیادہ سے زیادہ کرنے اور خریداری کے ہموار تجربات فراہم کرنے کے لیے بنایا گیا ہے ۔',
     'services.ecommerce.feature1': 'شاپنگ کارٹ', 'services.ecommerce.feature2': 'محفوظ ادائیگی', 'services.ecommerce.feature3': 'پروڈکٹ کیٹلاگ',
     'services.ecommerce.feature4': 'آرڈر مینجمنٹ', 'services.ecommerce.feature5': 'کسٹمر اکاؤنٹس', 'services.ecommerce.feature6': 'انوینٹری',
     'services.ecommerce.feature7': 'کرنسی', 'services.ecommerce.feature8': 'موبائل ڈیزائن', 'services.ecommerce.feature9': 'ایس ای او',

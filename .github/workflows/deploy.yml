@@ -64,6 +64,37 @@ jobs:
         with:
           name: build
           path: build/
+
+      - name: Ensure Pages is enabled
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.repos.getPages({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+              core.info('GitHub Pages is already enabled.');
+            } catch (error) {
+              if (error.status === 404) {
+                core.info('Enabling GitHub Pages for GitHub Actions...');
+                try {
+                  await github.rest.repos.createPagesSite({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    build_type: 'workflow'
+                  });
+                } catch (createError) {
+                  if (createError.status === 409) {
+                    core.info('GitHub Pages already enabled by another process.');
+                  } else {
+                    throw createError;
+                  }
+                }
+              } else {
+                throw error;
+              }
+            }
           
       - name: Setup Pages
         uses: actions/configure-pages@v4

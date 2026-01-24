@@ -1,9 +1,13 @@
 """
-LLM-based analysis for the NexGenTeck AI Chatbot.
-Uses Groq LLM for all interpretation - NO hardcoded patterns.
-This is a fully softcoded approach where the LLM understands intent dynamically.
+LLM + RoBERTa based analysis for the NexGenTeck AI Chatbot.
+Uses:
+- RoBERTa for sentiment analysis (word-level understanding)
+- Groq LLM for intent interpretation (no hardcoded patterns)
+
+This is a hybrid approach: RoBERTa for sentiment, LLM for intent.
 """
 
+from transformers import pipeline
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
 from typing import Dict
@@ -17,12 +21,14 @@ logger = logging.getLogger(__name__)
 
 class LLMAnalyzer:
     """
-    Analyzes user messages using LLM - fully softcoded approach.
-    No regex patterns or keyword matching - LLM interprets everything.
+    Hybrid analyzer combining RoBERTa and LLM.
+    - RoBERTa: Sentiment analysis (word dictionary based)
+    - LLM: Intent detection and greeting classification (softcoded)
     """
     
     _instance = None
     _llm = None
+    _sentiment_model = None
     
     def __new__(cls):
         """Singleton pattern."""
@@ -31,7 +37,8 @@ class LLMAnalyzer:
         return cls._instance
     
     def __init__(self):
-        """Initialize the LLM for analysis."""
+        """Initialize the LLM and RoBERTa models."""
+        # Initialize LLM for intent detection
         if LLMAnalyzer._llm is None:
             logger.info("Initializing LLM analyzer")
             try:
@@ -45,11 +52,24 @@ class LLMAnalyzer:
             except Exception as e:
                 logger.error(f"Failed to initialize LLM analyzer: {e}")
                 LLMAnalyzer._llm = None
+        
+        # Initialize RoBERTa for sentiment analysis
+        if LLMAnalyzer._sentiment_model is None:
+            logger.info("Initializing RoBERTa sentiment model")
+            try:
+                LLMAnalyzer._sentiment_model = pipeline(
+                    "sentiment-analysis",
+                    model="cardiffnlp/twitter-roberta-base-sentiment-latest",
+                    top_k=None
+                )
+                logger.info("RoBERTa sentiment model initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize RoBERTa model: {e}")
+                LLMAnalyzer._sentiment_model = None
     
     async def analyze(self, message: str) -> Dict[str, any]:
         """
-        Analyze the user message using LLM.
-        The LLM determines intent, sentiment, and whether it's a greeting.
+        Analyze the user message using RoBERTa (sentiment) and LLM (intent).
         
         Args:
             message: User message to analyze
@@ -57,11 +77,111 @@ class LLMAnalyzer:
         Returns:
             Dict with analysis results
         """
-        if LLMAnalyzer._llm is None:
-            return self._get_default_analysis()
+        result = {
+            'is_greeting': False,
+            'intent': 'general',
+            'sentiment': 'neutral',
+            'sentiment_score': 0.5,
+            'needs_context': True,
+            'context_topics': [],
+            'confidence': 0.5
+        }
+        
+        # Step 1: RoBERTa sentiment analysis
+        sentiment_result = self._analyze_sentiment_roberta(message)
+        result.update(sentiment_result)
+        
+        # Step 2: LLM intent analysis (softcoded - no hardcoded patterns)
+        intent_result = await self._analyze_intent_llm(message)
+        result.update(intent_result)
+        
+        logger.info(f"Analysis: sentiment={result['sentiment']}, intent={result['intent']}, needs_context={result['needs_context']}")
+        return result
+    
+    def _analyze_sentiment_roberta(self, message: str) -> Dict[str, any]:
+        """
+        Analyze sentiment using RoBERTa model.
+        RoBERTa uses word-level understanding for accurate sentiment detection.
+        
+        Args:
+            message: Text to analyze
+            
+        Returns:
+            Dict with 'sentiment' and 'sentiment_score'
+        """
+        if LLMAnalyzer._sentiment_model is None:
+            return {'sentiment': 'neutral', 'sentiment_score': 0.5}
         
         try:
-            analysis_prompt = self._build_analysis_prompt(message)
+            # Truncate to model's max length
+            results = LLMAnalyzer._sentiment_model(message[:512])
+            
+            if results and results[0]:
+                # Find the highest scoring sentiment
+                best = max(results[0], key=lambda x: x['score'])
+                label = best['label'].lower()
+                
+                # Map RoBERTa labels to standard sentiments
+                sentiment_map = {
+                    'positive': 'positive',
+                    'negative': 'negative',
+                    'neutral': 'neutral',
+                    'pos': 'positive',
+                    'neg': 'negative',
+                    'neu': 'neutral'
+                }
+                
+                sentiment = sentiment_map.get(label, 'neutral')
+                logger.debug(f"RoBERTa sentiment: {sentiment} (score: {best['score']:.3f})")
+                
+                return {
+                    'sentiment': sentiment,
+                    'sentiment_score': best['score']
+                }
+                
+        except Exception as e:
+            logger.error(f"RoBERTa sentiment analysis error: {e}")
+        
+        return {'sentiment': 'neutral', 'sentiment_score': 0.5}
+    
+    async def _analyze_intent_llm(self, message: str) -> Dict[str, any]:
+        """
+        Analyze intent using LLM (fully softcoded).
+        LLM interprets intent dynamically without hardcoded patterns.
+        
+        Args:
+            message: Text to analyze
+            
+        Returns:
+            Dict with intent analysis results
+        """
+        if LLMAnalyzer._llm is None:
+            return self._get_default_intent()
+        
+        try:
+            analysis_prompt = """You are an intelligent message analyzer for a business website chatbot (NexGenTeck - a tech company).
+
+Analyze the user's message and determine:
+
+1. **is_greeting**: Is this a greeting or casual hello? (true/false)
+2. **intent**: What does the user want? One of: "greeting", "question", "request", "complaint", "feedback", "general"
+3. **needs_context**: Does this message need information from our knowledge base to answer properly? (true/false)
+   - Greetings and casual chat do NOT need context
+   - Questions about services, pricing, company info DO need context
+4. **context_topics**: If needs_context is true, what topics should we search for? (list of keywords)
+
+IMPORTANT:
+- Be intelligent about understanding what the user wants
+- Do not use rigid rules - understand the intent naturally
+- The sentiment is already analyzed by a separate model, focus on INTENT
+
+Respond ONLY with valid JSON in this exact format:
+{
+    "is_greeting": true/false,
+    "intent": "greeting|question|request|complaint|feedback|general",
+    "needs_context": true/false,
+    "context_topics": ["topic1", "topic2"]
+}"""
             
             response = LLMAnalyzer._llm.invoke([
                 SystemMessage(content=analysis_prompt),
@@ -69,55 +189,15 @@ class LLMAnalyzer:
             ])
             
             # Parse JSON response
-            result = self._parse_analysis(response.content)
-            logger.info(f"LLM analysis result: {result}")
-            return result
+            return self._parse_intent_response(response.content)
             
         except Exception as e:
-            logger.error(f"LLM analysis error: {e}")
-            return self._get_default_analysis()
+            logger.error(f"LLM intent analysis error: {e}")
+            return self._get_default_intent()
     
-    def _build_analysis_prompt(self, message: str) -> str:
-        """
-        Build the analysis prompt for the LLM.
-        The LLM will interpret the message without any hardcoded rules.
-        """
-        return """You are an intelligent message analyzer. Analyze the user's message and determine:
-
-1. **is_greeting**: Is this a greeting or casual hello? (true/false)
-2. **intent**: What does the user want? One of: "greeting", "question", "request", "complaint", "feedback", "general"
-3. **sentiment**: The emotional tone. One of: "positive", "negative", "neutral"
-4. **needs_context**: Does this message need information from our knowledge base to answer properly? (true/false)
-   - Greetings and casual chat do NOT need context
-   - Questions about services, pricing, etc. DO need context
-5. **context_topics**: If needs_context is true, what topics should we search for? (list of keywords)
-
-IMPORTANT: 
-- You are analyzing for a business website chatbot (NexGenTeck - a tech company)
-- Be intelligent about understanding what the user wants
-- Do not use rigid rules - understand the intent naturally
-
-Respond ONLY with valid JSON in this exact format:
-{
-    "is_greeting": true/false,
-    "intent": "greeting|question|request|complaint|feedback|general",
-    "sentiment": "positive|negative|neutral",
-    "needs_context": true/false,
-    "context_topics": ["topic1", "topic2"]
-}"""
-    
-    def _parse_analysis(self, response: str) -> Dict[str, any]:
-        """
-        Parse the LLM's JSON response.
-        
-        Args:
-            response: LLM response string
-            
-        Returns:
-            Parsed analysis dict
-        """
+    def _parse_intent_response(self, response: str) -> Dict[str, any]:
+        """Parse the LLM's JSON response for intent analysis."""
         try:
-            # Try to extract JSON from response
             response = response.strip()
             
             # Handle markdown code blocks
@@ -128,62 +208,37 @@ Respond ONLY with valid JSON in this exact format:
             
             result = json.loads(response.strip())
             
-            # Ensure required fields exist
             return {
                 "is_greeting": result.get("is_greeting", False),
                 "intent": result.get("intent", "general"),
-                "sentiment": result.get("sentiment", "neutral"),
                 "needs_context": result.get("needs_context", True),
                 "context_topics": result.get("context_topics", []),
-                "confidence": 0.9  # LLM analysis is high confidence
+                "confidence": 0.9
             }
             
         except json.JSONDecodeError as e:
             logger.warning(f"Failed to parse LLM response as JSON: {e}")
-            return self._get_default_analysis()
+            return self._get_default_intent()
     
-    def _get_default_analysis(self) -> Dict[str, any]:
-        """
-        Return default analysis when LLM fails.
-        Assumes it needs context to be safe.
-        """
+    def _get_default_intent(self) -> Dict[str, any]:
+        """Return default intent when LLM fails."""
         return {
             "is_greeting": False,
             "intent": "general",
-            "sentiment": "neutral",
             "needs_context": True,
             "context_topics": [],
             "confidence": 0.5
         }
     
     def should_retrieve_context(self, analysis: Dict) -> bool:
-        """
-        Determine if we should retrieve context - based on LLM's decision.
-        
-        Args:
-            analysis: Result from analyze()
-            
-        Returns:
-            True if context retrieval is needed
-        """
+        """Determine if we should retrieve context - based on LLM's decision."""
         return analysis.get("needs_context", True)
     
     def get_search_query(self, message: str, analysis: Dict) -> str:
-        """
-        Build the search query for vector store.
-        Uses LLM-identified topics if available.
-        
-        Args:
-            message: Original user message
-            analysis: Analysis result
-            
-        Returns:
-            Search query string
-        """
+        """Build the search query for vector store using LLM-identified topics."""
         topics = analysis.get("context_topics", [])
         
         if topics:
-            # Use LLM-identified topics for better search
             return f"{message} {' '.join(topics)}"
         
         return message

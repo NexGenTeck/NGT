@@ -23,7 +23,7 @@ class Config:
     CORS_ORIGINS: list = os.getenv("CORS_ORIGINS", "*").split(",")
     
     # Model Configuration
-    EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+    EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
     
     # RAG Configuration

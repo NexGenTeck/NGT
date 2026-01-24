@@ -1,27 +1,50 @@
 # NexGenTeck AI Chatbot Backend
 
-A "softcoded" AI chatbot that dynamically understands user prompts and generates intelligent responses using RAG (Retrieval-Augmented Generation).
+A **fully softcoded** AI chatbot that uses LLM for intent interpretation and RoBERTa for sentiment analysis. No hardcoded regex patterns - the AI understands prompts dynamically.
 
 ## Features
 
-- 🧠 **Intelligent Understanding**: Automatically detects intent and sentiment
-- 🔍 **RAG Pipeline**: Retrieves relevant context from website knowledge base
-- 💬 **Natural Responses**: Powered by Llama 3.3 70B via Groq API
-- 🌐 **Auto Data Ingestion**: Scrapes website on startup for knowledge
-- 👋 **Smart Greetings**: Handles greetings naturally without RAG
-- 🐳 **GCP Ready**: Docker container for Cloud Run deployment
+- 🧠 **Hybrid Intelligence**: RoBERTa for sentiment + LLM for intent
+- 🔍 **RAG Pipeline**: LangGraph orchestrates analyze → retrieve → generate
+- 🌍 **Multilingual**: BAAI/bge-m3 embeddings support multiple languages
+- � **Website Knowledge**: Auto-scrapes entire website for context
+- � **GCP Ready**: Dockerfile for Cloud Run deployment
 
 ## Architecture
 
 ```
-User Message → Analyze (Sentiment/Intent) → Greeting? 
-                                              ↓ No
-                                         Retrieve Context (ChromaDB)
-                                              ↓
-                                         Generate Response (Llama 3.3)
-                                              ↓
-                                         Return Response
+User Message
+    ↓
+┌───────────────────────────────────┐
+│  RoBERTa Sentiment Analysis       │  ← Word-level understanding
+│  (cardiffnlp/twitter-roberta)     │
+└───────────────────────────────────┘
+    ↓
+┌───────────────────────────────────┐
+│  LLM Intent Detection             │  ← Softcoded, no regex
+│  (Llama 3.3 70B via Groq)         │
+└───────────────────────────────────┘
+    ↓
+┌───────────────────────────────────┐
+│  Qdrant Vector Search             │  ← Website knowledge
+│  (BAAI/bge-m3 embeddings)         │
+└───────────────────────────────────┘
+    ↓
+┌───────────────────────────────────┐
+│  LLM Response Generation          │  ← Context-aware response
+│  (Llama 3.3 70B via Groq)         │
+└───────────────────────────────────┘
+    ↓
+Response
 ```
+
+## Models Used
+
+| Component | Model | Purpose |
+|-----------|-------|---------|
+| Embeddings | `BAAI/bge-m3` | Multilingual text embeddings (1024 dim) |
+| Sentiment | `cardiffnlp/twitter-roberta-base-sentiment-latest` | Word-level sentiment analysis |
+| LLM | `llama-3.3-70b-versatile` | Intent detection & response generation |
 
 ## Quick Start
 
@@ -73,11 +96,11 @@ curl -X POST http://localhost:8000/chat \
 
 ## GCP Deployment
 
-### Option 1: Cloud Run (Recommended)
+### Cloud Run
 
 ```bash
 # Build and push to Container Registry
-gcloud builds submit --tag gcr.io/YOUR_PROJECT/chatbot
+gcloud builds submit --tag gcr.io/YOUR_PROJECT/chatbot ./Chatbot
 
 # Deploy to Cloud Run
 gcloud run deploy chatbot \
@@ -85,19 +108,9 @@ gcloud run deploy chatbot \
   --platform managed \
   --region us-central1 \
   --set-env-vars GROQ_API_KEY=your_key \
-  --allow-unauthenticated
-```
-
-### Option 2: Compute Engine
-
-```bash
-# Build Docker image
-docker build -t chatbot .
-
-# Run container
-docker run -d -p 8000:8000 \
-  -e GROQ_API_KEY=your_key \
-  chatbot
+  --allow-unauthenticated \
+  --memory 4Gi \
+  --cpu 2
 ```
 
 ## Environment Variables
@@ -106,6 +119,7 @@ docker run -d -p 8000:8000 \
 |----------|----------|---------|-------------|
 | `GROQ_API_KEY` | ✅ | - | Your Groq API key |
 | `WEBSITE_URL` | ❌ | https://nexgenteck.com | URL to scrape |
+| `EMBEDDING_MODEL` | ❌ | BAAI/bge-m3 | Embedding model |
 | `LLM_MODEL` | ❌ | llama-3.3-70b-versatile | Groq model name |
 | `LLM_TEMPERATURE` | ❌ | 0.7 | Response creativity |
 | `MAX_CONTEXT_DOCS` | ❌ | 5 | Docs to retrieve |
@@ -116,16 +130,23 @@ docker run -d -p 8000:8000 \
 Chatbot/
 ├── main.py           # FastAPI application
 ├── config.py         # Environment configuration
-├── scraper.py        # Website content scraper
-├── embeddings.py     # BGE-M3 embedding manager
-├── vector_store.py   # ChromaDB operations
-├── sentiment.py      # Sentiment & intent analysis
+├── sentiment.py      # RoBERTa + LLM hybrid analyzer
 ├── rag_pipeline.py   # LangGraph RAG workflow
-├── utils.py          # Helper utilities
+├── scraper.py        # Comprehensive website scraper
+├── embeddings.py     # BAAI/bge-m3 embedding manager
+├── vector_store.py   # Qdrant operations
+├── utils.py          # Text utilities
 ├── requirements.txt  # Python dependencies
-├── Dockerfile        # Container config
+├── Dockerfile        # GCP container config
 └── .env.example      # Environment template
 ```
+
+## How It Works (Softcoded)
+
+1. **No Hardcoded Patterns**: Intent is detected by LLM, not regex
+2. **RoBERTa Sentiment**: Uses word dictionary for accurate sentiment
+3. **LLM Intent**: Understands "What services do you offer?" without patterns
+4. **Website Context**: All responses based on scraped website content
 
 ## License
 

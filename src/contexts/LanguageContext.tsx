@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { serviceTranslations } from '../translations/serviceTranslations';
 
 // Define available languages
-export type Language = 'en' | 'ur' | 'ko' | 'zh' | 'ar' | 'fa' | 'de' | 'it' | 'es' | 'fr' | 'pt' | 'tr' | 'nl' | 'pl' | 'ja' | 'bn';
+export type Language = 'en' | 'ur' | 'ko' | 'zh' | 'ar' | 'fa' | 'de' | 'sv' | 'it' | 'es' | 'fr' | 'pt' | 'tr' | 'nl' | 'pl' | 'ja' | 'bn';
 
 interface LanguageContextType {
   language: Language;
@@ -10000,6 +10001,9 @@ const translations: Record<Language, Record<string, string>> = {
     'service.common.faq.subtitle': 'پاسخ سؤالات متداول را دریافت کنید',
     'chatbot.defaultMessage': 'سلام! به NexGenTeck خوش آمدید! من دستیار هوش مصنوعی شما هستم تا درباره خدمات ما به شما توضیح دهم و به هر پرسشی درباره تحول کسب‌وکارتان با متخصصان دورکار قابل اعتماد پاسخ بدهم. امروز چطور می‌توانم کمکتان کنم؟',
   },
+
+  // Swedish (sv)
+  sv: {},
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -10008,7 +10012,17 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguage] = useState<Language>('en');
 
   const t = (key: string): string => {
-    return translations[language][key] || translations.en[key] || key;
+    const serviceValue = serviceTranslations[language]?.[key];
+    if (serviceValue) {
+      return serviceValue;
+    }
+
+    const languageValue = translations[language]?.[key];
+    if (languageValue) {
+      return languageValue;
+    }
+
+    return translations.en[key] || key;
   };
 
   return (

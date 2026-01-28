@@ -42,6 +42,9 @@ jobs:
         env:
           NODE_ENV: production
           
+      - name: Create 404 page for SPA routing
+        run: cp build/index.html build/404.html
+          
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:

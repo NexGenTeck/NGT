@@ -4,6 +4,7 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, S
 import { motion } from 'motion/react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
+import logo from '../nexgentech-01.png';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -34,7 +35,8 @@ export const Footer: React.FC = () => {
             className="space-y-4"
           >
             <div className="flex items-center">
-              <div className="bg-black px-3 py-2 rounded-md">
+              <div className="bg-black px-3 py-2 rounded-md flex items-center space-x-2">
+                <img src={logo} alt="NexGenTeck Logo" className="h-8 w-auto object-contain" style={{ maxHeight: '32px', maxWidth: '100px' }} />
                 <span className="text-xl font-bold tracking-wide">
                   <span className="text-orange-500">NexGen</span>
                   <span className="text-white">Teck</span>

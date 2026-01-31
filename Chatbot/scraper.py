@@ -37,7 +37,8 @@ class WebsiteScraper:
     def scrape(self, max_pages: int = 100) -> List[Dict[str, str]]:
         """
         Scrape the ENTIRE website and extract ALL content.
-        This includes knowing the sitemap structure since it's a SPA.
+        For local development, uses translation files directly.
+        For production, scrapes the live website.
         
         Args:
             max_pages: Maximum number of pages to scrape
@@ -46,6 +47,18 @@ class WebsiteScraper:
             List of documents with 'content' and 'metadata' keys
         """
         logger.info(f"Starting comprehensive scrape of {self.base_url}")
+        
+        # For local development, use translation extractor to get ACTUAL content
+        # This avoids the issue of reading t('key') instead of real text
+        if 'localhost' in self.base_url or '127.0.0.1' in self.base_url:
+            logger.info("Local development detected - using translation extractor")
+            try:
+                from translation_extractor import get_translation_based_content
+                self.documents = get_translation_based_content()
+                logger.info(f"Loaded {len(self.documents)} documents from translations")
+                return self.documents
+            except Exception as e:
+                logger.warning(f"Translation extractor failed: {e}, falling back to source scraping")
         
         # known routes for the React app (since crawler can't always find links in JS)
         known_routes = [

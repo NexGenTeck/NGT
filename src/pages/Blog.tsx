@@ -160,7 +160,7 @@ export const Blog: React.FC = () => {
             <Link to={`/blog/${featuredPost.id}`}>
               <motion.div
                 whileHover={{ y: -10 }}
-                className="grid lg:grid-cols-2 gap-8 bg-gradient-to-br from-orange-50 to-purple-50 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all"
+                className="grid lg:grid-cols-2 gap-8 bg-black rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all border-4 border-orange-500"
               >
                 <div className="relative h-96 lg:h-auto">
                   <ImageWithFallback
@@ -168,21 +168,21 @@ export const Blog: React.FC = () => {
                     alt={featuredPost.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute top-4 left-4 bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg">
+                  <div className="absolute top-4 left-4 bg-orange-500 text-white px-4 py-2 rounded-lg">
                     {t('blog.featured.label')}
                   </div>
                 </div>
-                <div className="p-8 lg:p-12 flex flex-col justify-center">
+                <div className="p-8 lg:p-12 flex flex-col justify-center text-white">
                   <div className="flex flex-wrap gap-2 mb-4">
                     {featuredPost.tags.map((tag, idx) => (
-                      <span key={idx} className="px-3 py-1 bg-orange-100 text-orange-500 rounded-full text-sm">
+                      <span key={idx} className="px-3 py-1 bg-black/40 text-orange-300 border border-orange-500/60 rounded-full text-sm">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <h2 className="text-3xl lg:text-4xl text-gray-900 mb-4">{featuredPost.title}</h2>
-                  <p className="text-lg text-gray-600 mb-6">{featuredPost.excerpt}</p>
-                  <div className="flex items-center space-x-6 text-gray-600 mb-6">
+                  <h2 className="text-3xl lg:text-4xl text-white mb-4">{featuredPost.title}</h2>
+                  <p className="text-lg text-white/80 mb-6">{featuredPost.excerpt}</p>
+                  <div className="flex items-center space-x-6 text-white/70 mb-6">
                     <div className="flex items-center space-x-2">
                       <User className="w-4 h-4" />
                       <span className="text-sm">{featuredPost.author}</span>
@@ -196,7 +196,7 @@ export const Blog: React.FC = () => {
                       <span className="text-sm">{featuredPost.readTime}</span>
                     </div>
                   </div>
-                  <div className="flex items-center text-orange-500 group">
+                  <div className="flex items-center text-orange-400 group">
                     <span className="mr-2">{t('blog.actions.readArticle')}</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </div>

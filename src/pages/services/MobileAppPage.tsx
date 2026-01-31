@@ -40,18 +40,18 @@ export const MobileAppPage: React.FC = () => {
     packages: [
       {
         name: t('services.mobile.package1.name'),
-        price: '$9,999',
+        price: 'USD 286 – 536',
         features: t('services.mobile.package1.features').split(','),
       },
       {
         name: t('services.mobile.package2.name'),
-        price: '$19,999',
+        price: 'USD 536 – 2,860',
         popular: true,
         features: t('services.mobile.package2.features').split(','),
       },
       {
         name: t('services.mobile.package3.name'),
-        price: '$39,999',
+        price: 'USD 2,860 – 8,937+',
         features: t('services.mobile.package3.features').split(','),
       },
     ],

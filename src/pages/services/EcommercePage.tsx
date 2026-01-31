@@ -40,18 +40,18 @@ export const EcommercePage: React.FC = () => {
     packages: [
       {
         name: t('services.ecommerce.package1.name'),
-        price: '$2,499',
+        price: 'USD 89 – 357',
         features: t('services.ecommerce.package1.features').split(','),
       },
       {
         name: t('services.ecommerce.package2.name'),
-        price: '$4,999',
+        price: 'USD 357 – 1,072+',
         popular: true,
         features: t('services.ecommerce.package2.features').split(','),
       },
       {
         name: t('services.ecommerce.package3.name'),
-        price: '$9,999',
+        price: 'USD 1,200 – 2,200+',
         features: t('services.ecommerce.package3.features').split(','),
       },
     ],

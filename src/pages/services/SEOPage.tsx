@@ -40,18 +40,18 @@ export const SEOPage: React.FC = () => {
     packages: [
       {
         name: t('services.seo.package1.name'),
-        price: '$799',
+        price: 'USD 54 – 107 /mo',
         features: t('services.seo.package1.features').split(','),
       },
       {
         name: t('services.seo.package2.name'),
-        price: '$1,499',
+        price: 'USD 107 – 214 /mo',
         popular: true,
         features: t('services.seo.package2.features').split(','),
       },
       {
         name: t('services.seo.package3.name'),
-        price: '$2,999',
+        price: 'USD 214+ /mo',
         features: t('services.seo.package3.features').split(','),
       },
     ],

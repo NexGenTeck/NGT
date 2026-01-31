@@ -40,18 +40,18 @@ export const VideoEditingPage: React.FC = () => {
         packages: [
             {
                 name: t('services.videoediting.package1.name'),
-                price: '$499',
+                price: 'USD 11 /video',
                 features: t('services.videoediting.package1.features').split(','),
             },
             {
                 name: t('services.videoediting.package2.name'),
-                price: '$1,499',
+                price: 'USD 29 /video',
                 popular: true,
                 features: t('services.videoediting.package2.features').split(','),
             },
             {
                 name: t('services.videoediting.package3.name'),
-                price: '$3,999',
+                price: 'USD 29+ /video',
                 features: t('services.videoediting.package3.features').split(','),
             },
         ],

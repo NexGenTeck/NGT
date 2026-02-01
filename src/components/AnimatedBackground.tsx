@@ -8,11 +8,7 @@ interface Particle {
   vy: number;
 }
 
-interface AnimatedBackgroundProps {
-  forcedTheme?: 'light' | 'dark';
-}
-
-export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ forcedTheme }) => {
+export const AnimatedBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
@@ -32,9 +28,8 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ forcedTh
     let lastFrameTime = 0;
     const mouse: { x: number | null; y: number | null } = { x: null, y: null };
 
-    const effectiveTheme = forcedTheme ?? theme;
-    const backgroundColor = effectiveTheme === 'dark' ? '#000000' : '#ffffff';
-    const strokeColor = effectiveTheme === 'dark'
+    const backgroundColor = theme === 'dark' ? '#000000' : '#ffffff';
+    const strokeColor = theme === 'dark'
       ? 'rgba(180, 120, 20, 0.35)'
       : 'rgba(180, 120, 20, 0.2)';
 
@@ -143,7 +138,7 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ forcedTh
       container.removeEventListener('mouseleave', onLeave);
       window.cancelAnimationFrame(animationId);
     };
-  }, [forcedTheme, theme]);
+  }, [theme]);
 
   return (
     <div className="site-background" ref={containerRef} aria-hidden="true">

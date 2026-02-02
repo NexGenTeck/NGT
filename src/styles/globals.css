@@ -1,0 +1,461 @@
+@custom-variant dark (&:is(.dark *));
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #E07A2B;
+  /* NexGenTeck Orange */
+  --primary-foreground: #FFFFFF;
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #1A1A1A;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #FEF3C7;
+  /* Warm amber tint */
+  --accent-foreground: #78350F;
+  /* Dark amber */
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #E07A2B;
+  /* Orange ring */
+  --chart-1: #E07A2B;
+  /* Primary orange */
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: #F59E0B;
+  /* Amber */
+  --chart-5: #D97706;
+  /* Dark amber */
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: #E07A2B;
+  /* NexGenTeck Orange */
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #FEF3C7;
+  /* Warm amber */
+  --sidebar-accent-foreground: #78350F;
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: #E07A2B;
+}
+
+.dark {
+  --background: #0f0f0f;
+  --foreground: #f5f5f5;
+  --card: #1a1a1a;
+  --card-foreground: #f5f5f5;
+  --popover: #1a1a1a;
+  --popover-foreground: #f5f5f5;
+  --primary: #F97316;
+  /* NexGenTeck Orange for dark mode */
+  --primary-foreground: #FFFFFF;
+  --secondary: #262626;
+  --secondary-foreground: #f5f5f5;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #292524;
+  /* Dark warm tone */
+  --accent-foreground: #fdba74;
+  /* Light orange */
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: #333333;
+  --input: #262626;
+  --input-background: #1a1a1a;
+  --switch-background: #404040;
+  --ring: #F97316;
+  /* Orange ring for dark mode */
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: #F97316;
+  /* Primary orange */
+  --chart-2: #22c55e;
+  /* Green */
+  --chart-3: #3b82f6;
+  /* Blue */
+  --chart-4: #a855f7;
+  /* Purple */
+  --chart-5: #ec4899;
+  /* Pink */
+  --sidebar: #141414;
+  --sidebar-foreground: #f5f5f5;
+  --sidebar-primary: #F97316;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #292524;
+  --sidebar-accent-foreground: #fdba74;
+  --sidebar-border: #333333;
+  --sidebar-ring: #F97316;
+}
+
+@theme inline {
+  /* NexGenTeck Orange Brand Color Palette */
+  --color-orange-50: #FFF7ED;
+  --color-orange-100: #FFEDD5;
+  --color-orange-200: #FED7AA;
+  --color-orange-300: #FDBA74;
+  --color-orange-400: #FB923C;
+  --color-orange-500: #F97316;
+  --color-orange-600: #EA580C;
+  --color-orange-700: #C2410C;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animated background theme (light + dark) */
+.site-shell {
+  position: relative;
+  min-height: 100vh;
+}
+
+.site-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.site-background canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.site-content {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+/* Dark mode overrides for non-home pages */
+.dark .theme-non-home .bg-white {
+  background-color: #0f0f0f !important;
+}
+
+.dark .theme-non-home .bg-gray-50 {
+  background-color: #141414 !important;
+}
+
+.dark .theme-non-home .bg-gray-100 {
+  background-color: #1a1a1a !important;
+}
+
+.dark .theme-non-home .text-gray-900 {
+  color: #f5f5f5 !important;
+}
+
+.dark .theme-non-home .text-gray-800 {
+  color: #e5e5e5 !important;
+}
+
+.dark .theme-non-home .text-gray-700 {
+  color: #d4d4d4 !important;
+}
+
+.dark .theme-non-home .text-gray-600 {
+  color: #c2c2c2 !important;
+}
+
+.dark .theme-non-home .text-gray-500 {
+  color: #b0b0b0 !important;
+}
+
+.dark .theme-non-home .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.dark .theme-non-home .border-gray-200 {
+  border-color: #333333 !important;
+}
+
+.dark .theme-non-home .border-gray-100 {
+  border-color: #2a2a2a !important;
+}
+
+.dark .theme-non-home .hover\:bg-gray-50:hover {
+  background-color: #1a1a1a !important;
+}
+
+.dark .theme-non-home .hover\:bg-gray-100:hover {
+  background-color: #1f1f1f !important;
+}
+
+/* Orange utility classes for NexGenTeck brand */
+@layer utilities {
+  .bg-orange-500 {
+    background-color: #F97316;
+  }
+
+  .bg-orange-600 {
+    background-color: #EA580C;
+  }
+
+  .hover\:bg-orange-600:hover {
+    background-color: #EA580C;
+  }
+
+  .text-orange-500 {
+    color: #F97316;
+  }
+
+  .text-orange-600 {
+    color: #EA580C;
+  }
+
+  .hover\:text-orange-500:hover {
+    color: #F97316;
+  }
+
+  .from-orange-500 {
+    --tw-gradient-from: #F97316;
+  }
+
+  .to-orange-600 {
+    --tw-gradient-to: #EA580C;
+  }
+
+  .ring-orange-500 {
+    --tw-ring-color: #F97316;
+  }
+
+  .focus\:ring-orange-500:focus {
+    --tw-ring-color: #F97316;
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=' text-']), :not(:has([class^='text-'])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    label {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    button {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Dark Hero Section Styles - NexGenTeck Brand */
+.hero-dark {
+  background: linear-gradient(135deg, #030213 0%, #0a0a1f 50%, #030213 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(249, 115, 22, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Animated geometric network lines */
+.hero-network {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: networkPulse 8s ease-in-out infinite;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+@keyframes networkPulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+/* Glowing lines effect */
+.hero-glow-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-glow-lines::before,
+.hero-glow-lines::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.5), transparent);
+  animation: glowLine 6s linear infinite;
+}
+
+.hero-glow-lines::before {
+  top: 30%;
+  left: -100%;
+}
+
+.hero-glow-lines::after {
+  bottom: 40%;
+  right: -100%;
+  animation-delay: 3s;
+  animation-direction: reverse;
+}
+
+@keyframes glowLine {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+/* Floating particles effect */
+.hero-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-particles::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 4px;
+  height: 4px;
+  background: rgba(249, 115, 22, 0.6);
+  border-radius: 50%;
+  box-shadow: 
+    100px 50px 0 rgba(249, 115, 22, 0.4),
+    200px 100px 0 rgba(249, 115, 22, 0.3),
+    300px 30px 0 rgba(249, 115, 22, 0.5),
+    400px 80px 0 rgba(249, 115, 22, 0.2),
+    500px 120px 0 rgba(249, 115, 22, 0.4),
+    600px 40px 0 rgba(249, 115, 22, 0.3),
+    700px 90px 0 rgba(249, 115, 22, 0.5),
+    800px 60px 0 rgba(249, 115, 22, 0.2);
+  animation: floatParticles 20s linear infinite;
+}
+
+@keyframes floatParticles {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(-20px) translateY(-10px); }
+  100% { transform: translateX(0) translateY(0); }
+}

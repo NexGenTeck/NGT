@@ -9,9 +9,13 @@ A comprehensive, production-ready business website template built with React, Ty
 
 ### Core Functionality
 - **8 Complete Pages**: Home, About, Services, Portfolio, Pricing, Blog, Contact, 404
-- **6 Service Detail Pages**: E-commerce, Web Development, Mobile Apps, Social Media, SEO, Blockchain
-- **Multi-language Support**: Built-in internationalization (i18n) system
+- **8 Service Detail Pages**: E-commerce, Web Development, Mobile Apps, Social Media, SEO, Software, 3D Graphics, Video Editing
+- **Multi-language Support**: Built-in internationalization (i18n) with 15+ languages
 - **Responsive Design**: Mobile-first approach, works flawlessly on all devices
+- **Contact Form with Database**: TypeScript API + PostgreSQL backend for form submissions
+- **AI Chatbot Backend**: FastAPI-based RAG chatbot with intelligent lead generation
+- **Contact Form with Database**: TypeScript API + PostgreSQL backend for form submissions
+- **AI Chatbot Backend**: FastAPI-based RAG chatbot with intelligent lead generation
 
 ### Technical Highlights
 - ⚡ **Vite** - Lightning-fast build tool and dev server
@@ -21,6 +25,8 @@ A comprehensive, production-ready business website template built with React, Ty
 - 🎭 **Tailwind Utilities** - Modern styling with tailwind-merge
 - 🔄 **React Router** - Client-side routing with dynamic pages
 - 🚀 **CI/CD Pipeline** - Automated testing and deployment
+- 🤖 **AI Integration** - AgenticRAG chatbot with Groq LLM
+- 💾 **Database Backend** - PostgreSQL + TypeScript Express API
 
 ### UI/UX Features
 - Beautiful gradient backgrounds and glassmorphism effects
@@ -29,6 +35,7 @@ A comprehensive, production-ready business website template built with React, Ty
 - Professional testimonials and portfolio sections
 - Stats counters and achievement displays
 - SEO-optimized structure
+- Dark/Light theme support
 
 ## 🚀 Quick Start
 
@@ -65,16 +72,35 @@ npm run build
 | **UI Components** | Radix UI |
 | **Icons** | Lucide React |
 | **Routing** | React Router |
+| **Backend API** | Express + TypeScript |
+| **Database** | PostgreSQL 16 |
+| **Chatbot** | FastAPI + Qdrant + Groq |
 | **CI/CD** | GitHub Actions |
 
 ## 📁 Project Structure
 
 ```
-Startup/
+NGT/
 ├── .github/
 │   └── workflows/
 │       ├── deploy.yml      # Deployment pipeline
 │       └── ci.yml          # Continuous integration
+├── Chatbot/                # FastAPI chatbot backend
+│   ├── main.py
+│   ├── rag_pipeline.py
+│   ├── sentiment.py
+│   ├── vector_store.py
+│   └── docker-compose.yml
+├── ContactApi/             # TypeScript Express API
+│   ├── src/
+│   │   ├── index.ts
+│   │   └── db.ts
+│   ├── package.json
+│   └── docker-compose.yml
+├── Database/               # PostgreSQL setup
+│   ├── docker-compose.yml
+│   └── init/
+│       └── 01-schema.sql
 ├── src/
 │   ├── components/         # Reusable UI components
 │   │   ├── Header.tsx
@@ -100,6 +126,32 @@ Startup/
 ├── tsconfig.json           # TypeScript config
 └── package.json            # Dependencies
 ```
+
+## 🤖 Backend Services
+
+### Contact API
+TypeScript/Express API for handling contact form submissions with PostgreSQL storage.
+
+**Features:**
+- REST endpoint for form submissions
+- Input validation
+- PostgreSQL storage with prepared statements
+- CORS support for GitHub Pages
+- Docker deployment
+
+See [ContactApi/README.md](ContactApi/README.md) for setup instructions.
+
+### Chatbot Backend
+FastAPI-based RAG chatbot with intelligent conversation and lead generation.
+
+**Features:**
+- AgenticRAG pipeline with Qdrant vector store
+- Multi-language support
+- Sentiment analysis and intent detection
+- Automated lead generation
+- Website scraping and knowledge ingestion
+
+See [Chatbot/README.md](Chatbot/README.md) for setup instructions.
 
 ## 🔄 CI/CD Pipeline
 
@@ -128,14 +180,31 @@ The site automatically deploys to GitHub Pages when you push to the `main` branc
 
 **Live URL**: `https://muhammadhasaan82.github.io/Startup/`
 
-### Manual Deployment
+### Backend Deployment (DigitalOcean VM)
 
+1. **Deploy Database**:
 ```bash
-# Build the project
-npm run build
+cd Database
+cp .env.example .env
+# Edit .env with strong credentials
+docker compose up -d
+```
 
-# The build folder contains the production-ready files
-# Deploy the contents of the 'build' folder to your hosting provider
+2. **Deploy Contact API**:
+```bash
+cd ContactApi
+cp .env.example .env
+# Edit .env with DB credentials
+docker compose up -d
+```
+
+3. **Deploy Chatbot**:
+- Scalable backend architecture
+```bash
+cd Chatbot
+cp .env.example .env
+# Add GROQ_API_KEY
+docker compose up -d
 ```
 
 ## 🎨 Design Philosophy
@@ -148,7 +217,12 @@ This project emphasizes:
 - Clean, maintainable code structure
 - Type safety with TypeScript
 
-## 🛠️ Development
+## 🛠️ DevelopmentNGT/` for GitHub Pages. For local development, it uses `/`.
+
+For Contact API integration, set:
+```bash
+VITE_CONTACT_API_URL=https://api.yourdomain.com
+```
 
 ### Available Scripts
 
@@ -179,7 +253,7 @@ Contributions, issues, and feature requests are welcome!
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a Pull RequestNexGenTeck/NGT](https://github.com/NexGenTeck/NGT
 
 ## 📧 Contact
 

@@ -5,6 +5,7 @@ This is the ONLY source of information for the chatbot.
 """
 
 import requests
+import os
 from bs4 import BeautifulSoup
 from typing import List, Dict, Set
 from urllib.parse import urljoin, urlparse
@@ -48,10 +49,23 @@ class WebsiteScraper:
         """
         logger.info(f"Starting comprehensive scrape of {self.base_url}")
         
-        # For local development, use translation extractor to get ACTUAL content
-        # This avoids the issue of reading t('key') instead of real text
+        # If frontend sources are present locally, use translation extractor to get ACTUAL content
+        # (works in production containers when repo root is included in the build context).
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        lang_context = os.path.join(project_root, 'src', 'contexts', 'LanguageContext.tsx')
+        if os.path.exists(lang_context):
+            logger.info("Frontend sources detected - using translation extractor")
+            try:
+                from translation_extractor import get_translation_based_content
+                self.documents = get_translation_based_content()
+                logger.info(f"Loaded {len(self.documents)} documents from translations")
+                return self.documents
+            except Exception as e:
+                logger.warning(f"Translation extractor failed: {e}, falling back to source scraping")
+
+        # For local development without sources, fallback to translation extractor if possible
         if 'localhost' in self.base_url or '127.0.0.1' in self.base_url:
-            logger.info("Local development detected - using translation extractor")
+            logger.info("Local development detected - attempting translation extractor")
             try:
                 from translation_extractor import get_translation_based_content
                 self.documents = get_translation_based_content()

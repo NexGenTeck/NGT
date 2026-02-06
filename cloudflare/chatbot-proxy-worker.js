@@ -24,7 +24,7 @@ export default {
     const target = `http://165.245.177.103:8000${url.pathname}${url.search}`;
 
     const forwardHeaders = new Headers(request.headers);
-    forwardHeaders.set('Host', '165.245.177.103');
+    forwardHeaders.delete('Host');
 
     const init = {
       method: request.method,

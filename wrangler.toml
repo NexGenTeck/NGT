@@ -1,3 +1,4 @@
 name = "ngt-chatbot-proxy"
 main = "cloudflare/chatbot-proxy-worker.js"
 compatibility_date = "2026-02-06"
+workers_dev = true

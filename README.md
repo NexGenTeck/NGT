@@ -5,7 +5,7 @@
 
 A comprehensive, production-ready business website template built with React, TypeScript, and Vite. Perfect for digital agencies, tech companies, or service-based businesses looking for a modern web presence.
 
-## 🌟 Features
+## 🌟 Features 
 
 ### Core Functionality
 - **8 Complete Pages**: Home, About, Services, Portfolio, Pricing, Blog, Contact, 404

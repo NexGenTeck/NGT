@@ -15,7 +15,6 @@ export const Portfolio: React.FC = () => {
     { key: 'mobile', label: t('portfolio.filters.mobile') },
     { key: 'ecommerce', label: t('portfolio.filters.ecommerce') },
     { key: 'marketing', label: t('portfolio.filters.marketing') },
-    { key: 'blockchain', label: t('portfolio.filters.blockchain') },
   ];
 
   const projects = [
@@ -69,19 +68,6 @@ export const Portfolio: React.FC = () => {
         t('portfolio.projects.digital-campaign.tag1'),
         t('portfolio.projects.digital-campaign.tag2'),
         t('portfolio.projects.digital-campaign.tag3'),
-      ],
-    },
-    {
-      id: 'blockchain-platform',
-      title: t('portfolio.projects.blockchain-platform.title'),
-      category: 'blockchain',
-      client: 'CryptoVentures',
-      image: 'https://images.unsplash.com/photo-1666816943035-15c29931e975?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxibG9ja2NoYWluJTIwdGVjaG5vbG9neXxlbnwxfHx8fDE3NjQ0MzExMDh8MA&ixlib=rb-4.1.0&q=80&w=1080',
-      description: t('portfolio.projects.blockchain-platform.description'),
-      tags: [
-        t('portfolio.projects.blockchain-platform.tag1'),
-        t('portfolio.projects.blockchain-platform.tag2'),
-        t('portfolio.projects.blockchain-platform.tag3'),
       ],
     },
     {

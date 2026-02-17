@@ -1,9 +1,10 @@
 {
-      "name": "nexgenteck-website",
+      "name": "Multi-Page Next.js Website",
       "version": "0.1.0",
       "private": true,
+      "packageManager": "npm@10.8.2",
       "engines": {
-            "node": ">=20"
+            "node": "20.x"
       },
       "dependencies": {
             "@radix-ui/react-accordion": "^1.2.3",

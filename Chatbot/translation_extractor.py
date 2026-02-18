@@ -338,7 +338,7 @@ URL: https://nexgenteck.com/services
 
 NexGenTeck provides a comprehensive range of digital services to help businesses grow and succeed in the digital age.
 
-OUR SERVICES INCLUDE:
+OUR SERVICES INCLUDE (EXACTLY 8 SERVICES - NO OTHERS):
 
 1. WEB DEVELOPMENT
    Custom websites that engage visitors and drive business growth. We build responsive, fast, and SEO-friendly websites using modern technologies like React, Next.js, and TypeScript.
@@ -363,6 +363,10 @@ OUR SERVICES INCLUDE:
 
 8. VIDEO EDITING
    Professional video editing services including color grading, motion graphics, sound design, and social media optimization.
+
+IMPORTANT: NexGenTeck does NOT offer Blockchain Development, Outdoor Media, Billboards,
+Digital Displays, Transit Advertising, NFT Marketplaces, DeFi Platforms, Cybersecurity,
+IT Consulting, Data Analytics, AR/VR, or any other service not in the list above.
 
 Contact us today for a free consultation!
 """

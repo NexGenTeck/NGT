@@ -13,6 +13,7 @@ import logging
 from config import config
 from vector_store import vector_store
 from sentiment import llm_analyzer
+from reranker import reranker
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,9 @@ class ChatState(TypedDict):
     """State for the RAG pipeline."""
     message: str
     analysis: Dict
+    # Raw candidates from Qdrant (wider pool for re-ranking)
+    candidates: List[tuple]
+    # Final context passed to the LLM (re-ranked & trimmed)
     context: List[str]
     response: str
     error: str
@@ -76,44 +80,106 @@ def should_retrieve(state: ChatState) -> str:
 
 async def retrieve_context(state: ChatState) -> ChatState:
     """
-    Retrieve relevant context from the website knowledge base.
-    This is the ONLY source of information for the chatbot.
-    
+    Stage 1 of 2-stage retrieval: broad bi-encoder candidate fetch from Qdrant.
+
+    Fetches RERANK_CANDIDATE_DOCS (default 25) candidates — a wider pool than
+    what the LLM will ultimately see.  The next node (rerank_context) will
+    re-score this pool with a cross-encoder and keep only the best MAX_CONTEXT_DOCS.
+
     Args:
         state: Current pipeline state
-        
+
     Returns:
-        Updated state with context
+        Updated state with raw candidates list
     """
-    logger.info("Retrieving context from website knowledge base")
-    
+    logger.info("[Stage 1/2] Bi-encoder retrieval from Qdrant")
+
     try:
         # Build search query using LLM-identified topics
         search_query = llm_analyzer.get_search_query(
-            state['message'], 
+            state['message'],
             state['analysis']
         )
-        
-        # Search for relevant documents from scraped website
+
+        # Fetch a wider candidate pool when re-ranking is enabled
+        candidate_count = (
+            config.RERANK_CANDIDATE_DOCS
+            if config.ENABLE_RERANKING
+            else config.MAX_CONTEXT_DOCS
+        )
+
         results = vector_store.search(
             query=search_query,
-            n_results=config.MAX_CONTEXT_DOCS
+            n_results=candidate_count
         )
-        
-        # Extract content from results
+
+        state['candidates'] = results
+        logger.info(
+            "[Stage 1/2] Fetched %d candidates (re-ranking %s)",
+            len(results),
+            "enabled" if config.ENABLE_RERANKING else "disabled",
+        )
+
+    except Exception as exc:
+        logger.error(f"Context retrieval error: {exc}")
+        state['candidates'] = []
+
+    return state
+
+
+async def rerank_context(state: ChatState) -> ChatState:
+    """
+    Stage 2 of 2-stage retrieval: cross-encoder re-ranking.
+
+    Takes the wide candidate pool from Stage 1, scores every (query, doc)
+    pair jointly with a cross-encoder, and keeps only the top-N most
+    relevant documents for the LLM.  This removes noisy / tangential chunks
+    that bi-encoder similarity lets through.
+
+    If re-ranking is disabled or the model failed to load, the bi-encoder
+    ordering is preserved and the pool is simply trimmed to MAX_CONTEXT_DOCS.
+
+    Args:
+        state: Current pipeline state (must contain 'candidates')
+
+    Returns:
+        Updated state with 'context' list ready for prompt injection
+    """
+    logger.info("[Stage 2/2] Cross-encoder re-ranking")
+
+    candidates = state.get('candidates', [])
+
+    try:
+        # Re-rank and trim to MAX_CONTEXT_DOCS
+        reranked = reranker.rerank(
+            query=state['message'],
+            candidates=candidates,
+            top_n=config.MAX_CONTEXT_DOCS,
+        )
+
+        # Format for the LLM prompt
         context = []
-        for doc, distance, metadata in results:
+        for doc, score, metadata in reranked:
             source = metadata.get('source', 'website')
+            # Include cross-encoder score in debug log, not in prompt
+            logger.debug("[rerank] score=%.3f  source=%s  preview=%s", score, source, doc[:80])
             context.append(f"[Source: {source}]\n{doc}")
-            logger.debug(f"Retrieved (distance={distance:.3f}): {doc[:100]}...")
-        
+
         state['context'] = context
-        logger.info(f"Retrieved {len(context)} relevant documents from website")
-        
-    except Exception as e:
-        logger.error(f"Context retrieval error: {e}")
-        state['context'] = []
-    
+        logger.info(
+            "[Stage 2/2] Re-ranking complete: %d candidates → %d final docs for LLM",
+            len(candidates),
+            len(context),
+        )
+
+    except Exception as exc:
+        logger.error(f"Re-ranking error: {exc} — using raw candidates")
+        # Graceful fallback: use bi-encoder order trimmed to MAX_CONTEXT_DOCS
+        state['context'] = [
+            f"[Source: {meta.get('source', 'website')}]\n{doc}"
+            for doc, _dist, meta in candidates[:config.MAX_CONTEXT_DOCS]
+        ]
+
     return state
 
 
@@ -220,9 +286,10 @@ If a user asks about a service not in this list, explicitly say: "We don't curre
 
 === RAG PIPELINE STATUS ===
 Backend: 8GB Premium Intel server with Docker
-Vector Store: Qdrant with BAAI/bge-m3 embeddings
+Vector Store: Qdrant with BAAI/bge-m3 embeddings  (Stage 1: bi-encoder retrieval)
+Re-ranker: cross-encoder/ms-marco-MiniLM-L-6-v2   (Stage 2: cross-encoder re-ranking)
 LLM: Llama 3.3 70B via Groq (high-speed inference)
-Status: Optimized for high-speed RAG retrieval
+Status: 2-stage retrieval → precise context → high-quality answers
 """
     
     # Add retrieved context from Qdrant
@@ -308,12 +375,13 @@ def build_rag_pipeline() -> StateGraph:
     
     # Add nodes
     workflow.add_node("analyze", analyze_message)
-    workflow.add_node("retrieve_context", retrieve_context)
+    workflow.add_node("retrieve_context", retrieve_context)   # Stage 1: bi-encoder
+    workflow.add_node("rerank_context", rerank_context)       # Stage 2: cross-encoder
     workflow.add_node("generate_response", generate_response)
-    
+
     # Set entry point
     workflow.set_entry_point("analyze")
-    
+
     # LLM decides the routing - no hardcoded greeting detection
     workflow.add_conditional_edges(
         "analyze",
@@ -323,9 +391,10 @@ def build_rag_pipeline() -> StateGraph:
             "generate_response": "generate_response"
         }
     )
-    
-    # After retrieval, always generate
-    workflow.add_edge("retrieve_context", "generate_response")
+
+    # 2-stage retrieval → generate
+    workflow.add_edge("retrieve_context", "rerank_context")
+    workflow.add_edge("rerank_context", "generate_response")
     workflow.add_edge("generate_response", END)
     
     return workflow.compile()
@@ -352,6 +421,7 @@ async def process_message(message: str) -> str:
     initial_state: ChatState = {
         'message': message,
         'analysis': {},
+        'candidates': [],
         'context': [],
         'response': '',
         'error': ''

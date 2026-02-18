@@ -31,9 +31,17 @@ class Config:
     LLM_MODEL: str = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
     
     # RAG Configuration
-    MAX_CONTEXT_DOCS: int = int(os.getenv("MAX_CONTEXT_DOCS", "10"))
+    MAX_CONTEXT_DOCS: int = int(os.getenv("MAX_CONTEXT_DOCS", "5"))
     RELEVANCE_THRESHOLD: float = float(os.getenv("RELEVANCE_THRESHOLD", "1.5"))
-    
+
+    # Re-ranking Configuration
+    # Cross-encoder re-ranks a wider candidate pool down to MAX_CONTEXT_DOCS,
+    # giving the LLM a tighter, higher-signal context window.
+    ENABLE_RERANKING: bool = os.getenv("ENABLE_RERANKING", "true").lower() == "true"
+    RERANK_MODEL: str = os.getenv("RERANK_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2")
+    # Fetch this many candidates from Qdrant, then re-rank down to MAX_CONTEXT_DOCS
+    RERANK_CANDIDATE_DOCS: int = int(os.getenv("RERANK_CANDIDATE_DOCS", "25"))
+
     # LLM Parameters
     LLM_TEMPERATURE: float = float(os.getenv("LLM_TEMPERATURE", "0.7"))
     LLM_MAX_TOKENS: int = int(os.getenv("LLM_MAX_TOKENS", "1024"))

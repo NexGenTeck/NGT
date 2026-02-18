@@ -16,8 +16,14 @@ langgraph==0.2.62
 groq==0.13.1
 langchain-groq==0.2.2
 
-# Embeddings
+# Embeddings & Re-ranking
 sentence-transformers==3.3.1
+# Cross-encoder re-ranker (ms-marco-MiniLM-L-6-v2) is downloaded automatically
+# via sentence-transformers — no extra package needed
+
+# torch is a sentence-transformers transitive dep; pin CPU build for servers
+# without a GPU to keep the image small (override with torch+cu121 for GPU)
+torch>=2.0.0
 
 # Sentiment Analysis
 transformers==4.47.1

@@ -227,18 +227,6 @@ class TranslationExtractor:
                 'name': 'Video Editing',
                 'slug': 'video-editing',
                 'description': 'Professional video editing that captivates audiences'
-            },
-            {
-                'id': 'blockchain',
-                'name': 'Blockchain Development',
-                'slug': 'blockchain',
-                'description': 'Build decentralized applications for the future'
-            },
-            {
-                'id': 'outdoor',
-                'name': 'Outdoor Media',
-                'slug': 'outdoor-media',
-                'description': 'Create big impact with strategic outdoor advertising'
             }
         ]
         
@@ -375,12 +363,6 @@ OUR SERVICES INCLUDE:
 
 8. VIDEO EDITING
    Professional video editing services including color grading, motion graphics, sound design, and social media optimization.
-
-9. BLOCKCHAIN DEVELOPMENT
-   Smart contracts, DeFi platforms, NFT marketplaces, and decentralized applications on Ethereum, Polygon, and other chains.
-
-10. OUTDOOR MEDIA
-    Strategic outdoor advertising including billboards, digital displays, transit advertising, and experiential marketing.
 
 Contact us today for a free consultation!
 """

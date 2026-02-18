@@ -52,30 +52,20 @@ class WebsiteScraper:
         """
         logger.info(f"Starting comprehensive scrape of {self.base_url}")
         
-        # If frontend sources are present locally, use translation extractor to get ACTUAL content
-        # (works in production containers when repo root is included in the build context).
-        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        lang_context = os.path.join(project_root, 'src', 'contexts', 'LanguageContext.tsx')
-        if os.path.exists(lang_context):
-            logger.info("Frontend sources detected - using translation extractor")
-            try:
-                from translation_extractor import get_translation_based_content
-                self.documents = get_translation_based_content()
-                logger.info(f"Loaded {len(self.documents)} documents from translations")
-                return self.documents
-            except Exception as e:
-                logger.warning(f"Translation extractor failed: {e}, falling back to source scraping")
-
-        # For local development without sources, fallback to translation extractor if possible
-        if 'localhost' in self.base_url or '127.0.0.1' in self.base_url:
-            logger.info("Local development detected - attempting translation extractor")
-            try:
-                from translation_extractor import get_translation_based_content
-                self.documents = get_translation_based_content()
-                logger.info(f"Loaded {len(self.documents)} documents from translations")
-                return self.documents
-            except Exception as e:
-                logger.warning(f"Translation extractor failed: {e}, falling back to source scraping")
+        # Optional local-source ingestion (disabled by default in production).
+        # This avoids stale local content overriding live website updates.
+        if config.USE_TRANSLATION_EXTRACTOR:
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+            lang_context = os.path.join(project_root, 'src', 'contexts', 'LanguageContext.tsx')
+            if os.path.exists(lang_context) or 'localhost' in self.base_url or '127.0.0.1' in self.base_url:
+                logger.info("USE_TRANSLATION_EXTRACTOR=true - using translation extractor")
+                try:
+                    from translation_extractor import get_translation_based_content
+                    self.documents = get_translation_based_content()
+                    logger.info(f"Loaded {len(self.documents)} documents from translations")
+                    return self.documents
+                except Exception as e:
+                    logger.warning(f"Translation extractor failed: {e}, falling back to source scraping")
         
         # Crawl with a JS-capable browser so SPA content is rendered
         try:
@@ -85,14 +75,14 @@ class WebsiteScraper:
 
         # If scraping produced nothing, provide a fallback so the bot still works.
         if not self.documents:
-            logger.warning("No documents extracted from scraping; falling back to translation/fallback content")
-            try:
-                from translation_extractor import get_translation_based_content
-
-                self.documents = get_translation_based_content()
-                logger.info(f"Loaded {len(self.documents)} documents from translations fallback")
-            except Exception as e:
-                logger.warning(f"Translation fallback failed: {e}")
+            logger.warning("No documents extracted from scraping; falling back to safe defaults")
+            if config.USE_TRANSLATION_EXTRACTOR:
+                try:
+                    from translation_extractor import get_translation_based_content
+                    self.documents = get_translation_based_content()
+                    logger.info(f"Loaded {len(self.documents)} documents from translations fallback")
+                except Exception as e:
+                    logger.warning(f"Translation fallback failed: {e}")
 
             if not self.documents:
                 self.documents = self._get_fallback_content()

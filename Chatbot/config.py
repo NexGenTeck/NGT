@@ -18,6 +18,9 @@ class Config:
     
     # Website Configuration
     WEBSITE_URL: str = os.getenv("WEBSITE_URL", "https://nexgenteck.com")
+    # When enabled, scraper can ingest from local translation files.
+    # Keep disabled in production to avoid stale local content overriding live site data.
+    USE_TRANSLATION_EXTRACTOR: bool = os.getenv("USE_TRANSLATION_EXTRACTOR", "false").lower() == "true"
     
     # CORS Configuration - Restricted to production and local development
     # Override via environment variable for specific deployments

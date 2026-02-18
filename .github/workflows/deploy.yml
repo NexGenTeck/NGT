@@ -4,16 +4,12 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
-  actions: read
 
 concurrency:
   group: "pages"
@@ -23,70 +19,47 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          
-      - name: Install dependencies
-        run: npm install --include=optional
 
-      - name: Ensure Rollup Linux binary is present
-        run: npm install @rollup/rollup-linux-x64-gnu --no-save
-        
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install Rollup Linux binary
+        run: npm install @rollup/rollup-linux-x64-gnu --no-save --legacy-peer-deps
+
       - name: Build project
         run: npm run build
         env:
           NODE_ENV: production
-          
-      - name: Copy CNAME to build output
-        run: cp CNAME build/CNAME
 
-      - name: Create 404 page for SPA routing
+      - name: Copy CNAME and create 404
         run: |
-          # GitHub Pages SPA routing: inject redirect script into 404.html
-          sed 's|</head>|<script>var l=window.location;if(l.pathname!=="/"&&!l.pathname.match(/\\.\\w+$/)){sessionStorage.redirect=l.href};</script></head>|' build/index.html > build/404.html
+          cp CNAME build/CNAME
+          cp build/index.html build/404.html
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: build
           path: build/
-          retention-days: 1
 
   deploy:
     name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: build/
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        with:
-          enablement: true
-        
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/
-          
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

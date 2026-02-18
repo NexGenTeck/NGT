@@ -4,7 +4,7 @@
       "private": true,
       "packageManager": "npm@10.8.2",
       "engines": {
-            "node": "20.x"
+            "node": ">=20"
       },
       "dependencies": {
             "@radix-ui/react-accordion": "^1.2.3",

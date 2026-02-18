@@ -31,6 +31,7 @@ from config import config
 from scraper import WebsiteScraper
 from vector_store import vector_store
 from rag_pipeline import process_message
+from reranker import reranker
 
 # Configure logging
 logging.basicConfig(
@@ -80,6 +81,7 @@ class HealthResponse(BaseModel):
     status: str
     message: str
     documents_count: int
+    reranker: dict = {}
 
 
 @asynccontextmanager
@@ -167,7 +169,8 @@ async def health_check():
     return HealthResponse(
         status="healthy",
         message="All systems operational",
-        documents_count=vector_store.count()
+        documents_count=vector_store.count(),
+        reranker=reranker.status(),
     )
 
 

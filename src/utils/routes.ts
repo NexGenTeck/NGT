@@ -15,6 +15,7 @@ import { SocialMediaPage } from '../pages/services/SocialMediaPage';
 import { SoftwareDevelopmentPage } from '../pages/services/SoftwareDevelopmentPage';
 import { ThreeDGraphicsPage } from '../pages/services/ThreeDGraphicsPage';
 import { VideoEditingPage } from '../pages/services/VideoEditingPage';
+import { AIPage } from '../pages/services/AIPage';
 import { NotFound } from '../pages/NotFound';
 
 const BLOG_ENABLED = false;
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
       { path: 'services/software', Component: SoftwareDevelopmentPage },
       { path: 'services/3d-graphics', Component: ThreeDGraphicsPage },
       { path: 'services/video-editing', Component: VideoEditingPage },
+      { path: 'services/artificial-intelligence', Component: AIPage },
       { path: 'portfolio', Component: Portfolio },
       { path: 'portfolio/:id', Component: Portfolio },
       ...blogRoutes,

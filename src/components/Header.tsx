@@ -52,6 +52,7 @@ export const Header: React.FC = () => {
     { name: 'services.software', path: '/services/software' },
     { name: 'services.3dgraphics', path: '/services/3d-graphics' },
     { name: 'services.videoediting', path: '/services/video-editing' },
+    { name: 'services.ai', path: '/services/artificial-intelligence' },
   ];
 
   // Dynamic classes for dark mode support

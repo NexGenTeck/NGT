@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { ArrowRight, ShoppingCart, Globe, Search, Share2, Smartphone, Code, Box, Video } from 'lucide-react';
+import { ArrowRight, ShoppingCart, Globe, Search, Share2, Smartphone, Code, Box, Video, Brain } from 'lucide-react';
 import { AnimatedSection } from '../components/AnimatedSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
@@ -73,6 +73,14 @@ export const Services: React.FC = () => {
       description: 'Professional video editing services to create engaging content that captivates your audience and tells your story.',
       features: ['Commercial Video Production', 'Social Media Content', 'Color Grading & Correction', 'Motion Graphics & VFX', 'Audio Enhancement'],
       image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aWRlbyUyMGVkaXRpbmd8ZW58MXx8fHwxNzM4MjQ1NjAwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    },
+    {
+      title: 'Artificial Intelligence (AI)',
+      slug: 'artificial-intelligence',
+      icon: <Brain className="w-12 h-12" />,
+      description: 'Empower your business with cutting-edge AI solutions, from intelligent chatbots to predictive analytics and computer vision.',
+      features: ['Conversational AI Chatbots', 'Voice AI Agents', 'RAG Systems', 'Agentic AI Systems', 'Data Analytics'],
+      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDF8fHx8MTc2NDQyNjgzNnww&ixlib=rb-4.1.0&q=80&w=1080',
     },
   ];
 

@@ -130,6 +130,7 @@ export const Footer: React.FC = () => {
               <li><Link to="/services/ecommerce" className="hover:text-orange-500 transition-colors">{t('services.ecommerce')}</Link></li>
               <li><Link to="/services/seo" className="hover:text-orange-500 transition-colors">{t('services.seo')}</Link></li>
               <li><Link to="/services/social-media" className="hover:text-orange-500 transition-colors">{t('services.social')}</Link></li>
+              <li><Link to="/services/artificial-intelligence" className="hover:text-orange-500 transition-colors">{t('services.ai.title')}</Link></li>
               <li><Link to="/services/3d-graphics" className="hover:text-orange-500 transition-colors">{t('services.3dgraphics')}</Link></li>
               <li><Link to="/services/video-editing" className="hover:text-orange-500 transition-colors">{t('services.videoediting')}</Link></li>
             </ul>

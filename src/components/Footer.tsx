@@ -97,7 +97,7 @@ export const Footer: React.FC = () => {
                 }}
               >
                 <a
-                  href="https://www.facebook.com/profile.php?id=61585558202243"
+                  href="https://www.facebook.com/NexGenTeck"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white hover:text-orange-500 transition-colors"
@@ -115,7 +115,7 @@ export const Footer: React.FC = () => {
                   <WhatsAppLogo className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://www.linkedin.com/company/nexgenteck"
+                  href="http://www.linkedin.com/in/NexGenTeck"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white hover:text-orange-500 transition-colors"

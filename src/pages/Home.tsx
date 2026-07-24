@@ -97,7 +97,7 @@ export const Home: React.FC = () => {
       descKey: 'services.web.desc',
       icon: '💻',
       link: '/services/web-development',
-      image: 'public/services/web_development.jpg',
+      image: '/services/web_development.jpg',
     },
     {
       titleKey: 'services.mobile',

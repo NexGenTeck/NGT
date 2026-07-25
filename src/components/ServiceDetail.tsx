@@ -223,7 +223,7 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({
                     {pkg.name}
                   </h3>
                   <div
-                    className={`mb-6 w-full overflow-visible ${
+                    className={`ngt-package-price mb-6 w-full overflow-visible ${
                       pkg.popular ? 'text-white' : 'text-orange-500'
                     }`}
                     style={{

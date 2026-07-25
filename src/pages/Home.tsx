@@ -203,7 +203,7 @@ export const Home: React.FC = () => {
                   style={{ flexBasis: '100%' }}
                 >
                   <div
-                    className="relative w-full flex items-center justify-center"
+                    className="ngt-hero-slide relative w-full flex items-center justify-center"
                     style={{ height: '600px' }}
                   >
                     {/* Background Image */}
@@ -244,7 +244,7 @@ export const Home: React.FC = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="max-w-4xl mx-auto text-white mt-16"
+                        className="ngt-hero-content max-w-4xl mx-auto text-white mt-16"
                       >
                         <motion.h1
                           initial={{ opacity: 0, y: 20 }}
@@ -332,7 +332,7 @@ export const Home: React.FC = () => {
 
             {/* Dot Indicators */}
             <div
-              className="absolute left-1/2 -translate-x-1/2 flex gap-3 z-20"
+              className="ngt-hero-dots absolute left-1/2 -translate-x-1/2 flex gap-3 z-20"
               style={{ bottom: '80px' }}
             >
               {heroSlides.map((_, index) => (

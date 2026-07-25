@@ -76,9 +76,9 @@ export const Header: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="bg-black px-3 py-2 rounded-md flex items-center space-x-2">
+            <div className="ngt-brand bg-black px-3 py-2 rounded-md flex items-center space-x-2">
               <img src={logo} alt="NexGenTeck Logo" className="h-8 w-auto object-contain" style={{ maxHeight: '32px', maxWidth: '100px' }} />
-              <span className="text-2xl font-extrabold tracking-normal">
+              <span className="ngt-brand-word text-2xl font-extrabold tracking-normal">
                 <span className="text-orange-500">NexGen</span>
                 <span className="text-white">Teck</span>
               </span>
@@ -181,7 +181,9 @@ export const Header: React.FC = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`lg:hidden ${textColor} hover:text-orange-500 transition-colors`}
+            className={`ngt-menu-toggle lg:hidden ${textColor} hover:text-orange-500 transition-colors`}
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -194,7 +196,7 @@ export const Header: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden mt-4 pb-4"
+              className="ngt-mobile-menu lg:hidden mt-4 pb-4"
             >
               <div className="flex flex-col space-y-3">
                 <Link to="/" onClick={() => setIsMenuOpen(false)} className={`${textColor} hover:text-orange-500 transition-colors py-2`}>

@@ -59,7 +59,7 @@ export const Pricing: React.FC = () => {
 
                   <div className="space-y-4">
                     {service.tiers.map((tier) => (
-                      <div key={tier} className="flex items-start justify-between border-b border-gray-100 pb-3 last:border-b-0">
+                      <div key={tier} className="ngt-pricing-tier flex items-start justify-between border-b border-gray-100 pb-3 last:border-b-0">
                         <span className="text-gray-700 font-medium">
                           {t(`pricing.services.${service.id}.tier.${tier}.label`)}
                         </span>

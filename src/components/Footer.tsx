@@ -78,20 +78,20 @@ export const Footer: React.FC = () => {
             className="flex flex-col items-start space-y-3"
           >
             {/* Logo and Brand Name */}
-            <div className="bg-black px-3 py-2 rounded-md flex items-center space-x-2">
+            <div className="ngt-brand bg-black px-3 py-2 rounded-md flex items-center space-x-2">
               <img src={logo} alt="NexGenTeck Logo" className="h-8 w-auto object-contain" style={{ maxHeight: '32px', maxWidth: '100px' }} />
-              <span className="text-2xl font-extrabold tracking-normal">
+              <span className="ngt-brand-word text-2xl font-extrabold tracking-normal">
                 <span className="text-orange-500">NexGen</span>
                 <span className="text-white">Teck</span>
               </span>
             </div>
             {/* Align motto/icons to left edge of NexGenTeck text (after logo img + gap) */}
-            <div style={{ paddingLeft: `${footerBrandOffset}px` }} className="space-y-3">
+            <div style={{ paddingLeft: `${footerBrandOffset}px` }} className="ngt-footer-brand-details space-y-3">
               <p className="text-gray-400 text-sm">
                 {t('footer.tagline')}
               </p>
               <div
-                className="flex items-center justify-between"
+                className="ngt-footer-social flex items-center justify-between"
                 style={{
                   width: `${footerSocialWidth}px  + 1px`,
                 }}

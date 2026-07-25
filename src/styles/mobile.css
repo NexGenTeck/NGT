@@ -1,0 +1,540 @@
+/* ============================================================================
+   NexGenTeck — Mobile browser responsiveness & UX refinements
+   ----------------------------------------------------------------------------
+   SCOPE RULES (do not break these):
+   - Every rule in this file lives inside a `max-width` media query, so the
+     desktop experience at >= 1024px is byte-for-byte unchanged.
+   - No colours, gradients, fonts, font families, brand assets, animations or
+     transitions are introduced, replaced or removed here. Only layout,
+     sizing, spacing and touch-target geometry are adjusted.
+   - This project ships a PRE-COMPILED Tailwind stylesheet (src/index.css) and
+     has no Tailwind build step, so new `sm:`/`md:` utility classes added in
+     JSX would silently do nothing. Mobile adjustments therefore have to be
+     expressed as plain CSS that targets the class names already present in
+     the markup.
+   - Rules are intentionally written *outside* any `@layer`, so they win over
+     the layered utilities in index.css without needing `!important`.
+     `!important` is used only where the markup sets an inline `style`.
+   ========================================================================= */
+
+
+/* ---------------------------------------------------------------------------
+   1. Text safety — long words / URLs must never force a horizontal scrollbar
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  label,
+  .message-content {
+    overflow-wrap: break-word;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   1b. Scroll-reveal overshoot
+   `AnimatedSection` with direction="left"/"right" starts its entry animation
+   at `x: ±50px`. On desktop those sections sit in a multi-column grid and the
+   50px offset stays inside the container; on a phone the same section is
+   full-width, so the pre-animation transform sticks 34-50px past the right
+   edge and creates a real horizontal scrollbar on About, Contact and every
+   service detail page.
+   Clipping the overshoot on <main> keeps the animation itself completely
+   intact (it still slides in from the same distance) and does not affect the
+   fixed header, footer or chatbot, which are siblings of <main>.
+   `clip` (not `hidden`) is used so no scroll container is created and
+   position: sticky / fixed descendants keep working.
+   Applied up to 1023px because those sections only move into a multi-column
+   grid at the `lg` breakpoint; from 1024px up the overshoot already fits and
+   the rule is not applied at all.
+   ------------------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  main {
+    overflow-x: clip;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   2. Header / navigation
+   The brand lock-up (logo image + "NexGenTeck" wordmark) at its desktop size
+   plus the menu button is wider than a 320-360px viewport, which pushed the
+   header out of the viewport. Scale the lock-up down on small screens and
+   give the hamburger a proper 44px touch target.
+   The mobile menu lives inside a `position: fixed` header, so a long menu
+   (services expanded + 17 languages) could not be scrolled to. Cap its
+   height and let it scroll instead.
+   ------------------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  header nav {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .ngt-brand {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
+
+  .ngt-brand img {
+    max-height: 28px !important;
+    max-width: 84px !important;
+  }
+
+  .ngt-brand .ngt-brand-word {
+    font-size: 1.25rem;
+  }
+
+  .ngt-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    margin-right: -0.5rem;
+  }
+
+  .ngt-mobile-menu {
+    max-height: calc(100vh - 4.75rem);
+    max-height: calc(100dvh - 4.75rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Comfortable tap targets for the mobile nav links / disclosure buttons. */
+  .ngt-mobile-menu > div > a,
+  .ngt-mobile-menu > div > div > button {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ngt-mobile-menu > div > a.text-center {
+    justify-content: center;
+  }
+
+  .ngt-mobile-menu .language-scrollbar button {
+    min-height: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ngt-brand img {
+    max-height: 26px !important;
+    max-width: 72px !important;
+  }
+
+  .ngt-brand .ngt-brand-word {
+    font-size: 1.0625rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .ngt-brand .ngt-brand-word {
+    font-size: 1rem;
+  }
+
+  /* Two language columns are too narrow below 360px. */
+  .ngt-mobile-menu .language-scrollbar.grid-cols-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   3. Home hero slider
+   The slide has a hard-coded 600px height and the content block carries a
+   64px top offset, which on a phone pushed the CTAs down onto the dot
+   indicators and left the heading squeezed against the carousel arrows.
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .ngt-hero-slide {
+    height: 520px !important;
+  }
+
+  .ngt-hero-content {
+    /* Replaces the desktop `mt-16`: still clears the fixed header, without
+       pushing the CTAs onto the dot indicators. */
+    margin-top: 2.5rem;
+    /* Keeps the copy clear of the left/right carousel arrows. */
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
+
+  .ngt-hero-content h1 {
+    font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .ngt-hero-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .ngt-hero-content a,
+  .ngt-hero-content button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-width: 100%;
+  }
+
+  .ngt-hero-dots {
+    bottom: 24px !important;
+  }
+
+  /* The 12px dots keep their exact look; the ::after only enlarges the
+     invisible touch area to ~40px. */
+  .ngt-hero-dots button {
+    position: relative;
+  }
+
+  .ngt-hero-dots button::after {
+    content: '';
+    position: absolute;
+    inset: -14px;
+  }
+
+  /* Arrows stay usable (>=40px) but stop crowding the headline. */
+  [data-slot='carousel-previous'],
+  [data-slot='carousel-next'] {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* Narrower screens wrap the headline and subtitle onto more lines, so the
+   slide needs a little more room, not less. */
+@media (max-width: 400px) {
+  .ngt-hero-slide {
+    height: 560px !important;
+  }
+
+  .ngt-hero-content {
+    margin-top: 1.5rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   4. Typography
+   Only headings/lead paragraphs that carry a fixed desktop size are scaled.
+   Font family, weight, colour and letter-spacing are untouched.
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  h1.text-5xl {
+    font-size: clamp(1.75rem, 7.6vw, 2.375rem);
+    line-height: 1.18;
+  }
+
+  h1.text-4xl {
+    font-size: clamp(1.625rem, 7vw, 2.25rem);
+    line-height: 1.2;
+  }
+
+  h2.text-4xl {
+    font-size: clamp(1.5rem, 6.4vw, 2rem);
+    line-height: 1.22;
+  }
+
+  h2.text-3xl {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  h3.text-2xl {
+    font-size: 1.25rem;
+    line-height: 1.35;
+  }
+
+  h3.text-xl {
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
+
+  p.text-xl {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  p.text-lg {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   5. Section rhythm — desktop section padding (80px top + bottom) wastes a
+   large part of a phone screen before any content is reached.
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  section.py-20 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  section.py-16 {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  section.py-12 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  section.py-8 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  /* Offset for the fixed header on every inner page. */
+  .min-h-screen.pt-20 {
+    padding-top: 4.5rem;
+  }
+
+  footer .py-16 {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .text-center.mb-16 {
+    margin-bottom: 2rem;
+  }
+
+  .grid.mb-16 {
+    margin-bottom: 2rem;
+  }
+
+  .text-center.mt-12 {
+    margin-top: 2rem;
+  }
+
+  .grid.gap-12 {
+    gap: 2rem;
+  }
+
+  .grid.gap-8 {
+    gap: 1.5rem;
+  }
+
+  /* Home stats band. */
+  .grid.grid-cols-2.mt-16 {
+    margin-top: 1.5rem;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   6. Cards & panels — 32px/48px inner padding leaves almost no room for
+   content inside a 320px viewport.
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .rounded-3xl.p-8,
+  .rounded-3xl.p-12,
+  .rounded-2xl.p-8,
+  .rounded-2xl.p-12 {
+    padding: 1.25rem;
+  }
+
+  .rounded-2xl.p-6,
+  .rounded-xl.p-6 {
+    padding: 1.125rem;
+  }
+
+  /* Cards whose whole point is a centred icon + copy keep a little more air. */
+  .rounded-2xl.p-8.text-center {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stats tiles sit two-up, so they need the tightest gutters. */
+  .grid-cols-2 > * .rounded-2xl.p-8 {
+    padding: 1rem 0.75rem;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   7. Buttons & touch targets
+   ------------------------------------------------------------------------ */
+@media (max-width: 480px) {
+  a.px-8.py-4,
+  button.px-8.py-4,
+  a.px-8.py-3,
+  button.px-8.py-3,
+  a.px-6.py-3,
+  button.px-6.py-3 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    max-width: 100%;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   8. Pricing — the tier rows put a long label and a price on one line, which
+   collapsed into an unreadable two-column squeeze on narrow screens.
+   ------------------------------------------------------------------------ */
+@media (max-width: 480px) {
+  .ngt-pricing-tier {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+  }
+}
+
+/* Service package price is `white-space: nowrap` with a viewport-based clamp
+   and its spaces are replaced by non-breaking spaces in the markup, so on a
+   phone a long price string overflowed its card horizontally. */
+@media (max-width: 767px) {
+  .ngt-package-price {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    font-size: 1.125rem !important;
+    letter-spacing: -0.01em !important;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   9. Footer
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  /* The desktop 52px indent (aligning the motto under the wordmark) eats a
+     sixth of a 320px screen. */
+  .ngt-footer-brand-details {
+    padding-left: 0 !important;
+  }
+
+  .ngt-footer-social {
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  /* The 20px social glyphs and the 21px-tall link rows are well below a
+     comfortable touch target. */
+  .ngt-footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  footer ul li a {
+    display: inline-block;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   10. Chatbot / floating widget
+   The popover is 350px wide and anchored 20px from the right edge, i.e. it
+   needs 370px and overflowed 320-360px viewports horizontally. The previous
+   480px override (300px wide, right: -10px) still overhung the right edge.
+   Anchor it to both edges instead and size its height off the viewport so
+   the header, message list, input and close button all stay reachable.
+   The float / slide-up animations are preserved.
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .ai-chatbot-container {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .ai-chatbot-toggle {
+    width: 56px;
+    height: 56px;
+  }
+
+  .chatbot-toggle-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ai-chatbot-popover {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 84px;
+    width: auto;
+    height: min(68vh, 520px);
+    height: min(68dvh, 520px);
+  }
+
+  .chatbot-header {
+    padding: 12px 14px;
+  }
+
+  .close-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .chatbot-messages {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .message {
+    max-width: 94%;
+  }
+
+  .chatbot-input {
+    padding: 12px 14px 14px;
+  }
+
+  /* 16px avoids the automatic zoom-on-focus in mobile Safari. */
+  .message-input {
+    font-size: 16px;
+  }
+
+  .send-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   11. Forms — keep every control inside the viewport and tappable.
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    max-width: 100%;
+  }
+
+  form button[type='submit'] {
+    min-height: 48px;
+  }
+
+  /* Contact-card email / phone links are single 21px text rows. */
+  a[href^='mailto:']:not([class*='px-']),
+  a[href^='tel:']:not([class*='px-']) {
+    display: inline-block;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+  }
+
+  .contact-subject-select {
+    /* Native select text must not be cut off on narrow screens. */
+    padding-right: 2rem;
+    text-overflow: ellipsis;
+  }
+}

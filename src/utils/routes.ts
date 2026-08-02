@@ -17,6 +17,7 @@ import { ThreeDGraphicsPage } from '../pages/services/ThreeDGraphicsPage';
 import { VideoEditingPage } from '../pages/services/VideoEditingPage';
 import { AIPage } from '../pages/services/AIPage';
 import { NotFound } from '../pages/NotFound';
+import { Sitemap } from '../pages/Sitemap';
 
 const BLOG_ENABLED = false;
 
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
       ...blogRoutes,
       { path: 'pricing', Component: Pricing },
       { path: 'contact', Component: Contact },
+      { path: 'sitemap', Component: Sitemap },
       { path: '*', Component: NotFound },
     ],
   },

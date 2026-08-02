@@ -159,6 +159,7 @@ export const Footer: React.FC = () => {
               <li><Link to="/portfolio" className="hover:text-orange-500 transition-colors">{t('nav.portfolio')}</Link></li>
               <li className="hidden"><Link to="/blog" className="hover:text-orange-500 transition-colors">{t('nav.blog')}</Link></li>
               <li><Link to="/contact" className="hover:text-orange-500 transition-colors">{t('nav.contact')}</Link></li>
+              <li><Link to="/sitemap" className="hover:text-orange-500 transition-colors">{t('footer.sitemap')}</Link></li>
             </ul>
           </motion.div>
 
@@ -270,13 +271,7 @@ export const Footer: React.FC = () => {
             <p className="text-gray-400 text-center md:text-left">
               {t('footer.rights')}
             </p>
-            <div className="hidden space-x-6" aria-hidden>
-              <Link to="/privacy" className="text-gray-400 hover:text-orange-500 transition-colors">
-                {t('footer.privacy')}
-              </Link>
-              <Link to="/terms" className="text-gray-400 hover:text-orange-500 transition-colors">
-                {t('footer.terms')}
-              </Link>
+            <div className="flex space-x-6">
               <Link to="/sitemap" className="text-gray-400 hover:text-orange-500 transition-colors">
                 {t('footer.sitemap')}
               </Link>

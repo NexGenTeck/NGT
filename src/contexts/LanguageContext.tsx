@@ -454,6 +454,11 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.privacy': 'Privacy Policy',
     'footer.terms': 'Terms of Service',
     'footer.sitemap': 'Sitemap',
+    'sitemap.title': 'Sitemap',
+    'sitemap.subtitle': 'Browse all pages on NexGenTeck',
+    'sitemap.mainPages': 'Main Pages',
+    'sitemap.services': 'Services',
+    'sitemap.portfolio': 'Portfolio Projects',
     'footer.rights': '\u00A9 2026 NexGenTeck | All rights reserved.',
     // Web Development
     'services.web.title': 'Website Development',
